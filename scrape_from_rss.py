@@ -83,6 +83,7 @@ for feed in feed_info.keys():
 		
 	if feed_rss.status == 304:
 		#print('No new items in %s since last update.' % feed_name)
+		continue
 	else:
 		#print('Number of RSS posts : %d' % len(feed_rss.entries))	
 #		with open('paper-titles-unseen-%s.csv' % feed, mode='w') as data_file:
