@@ -1,7 +1,6 @@
 scikit-learn
 pandas
 unidecode
-json
 tweepy
 feedparser
 
