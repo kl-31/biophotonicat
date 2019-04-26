@@ -17,7 +17,7 @@ from credentials import *
 import tweepy
 from time import sleep
 #import bitly_api
-import sys
+#import sys
 
 def post_in_db(row):
 	path = 'database.txt'
@@ -91,7 +91,7 @@ def tweet_post(line):
 	auth.set_access_token(access_token, access_token_secret)
 	api = tweepy.API(auth)	
 	api.update_status(line)
-	sleep(300)
+	sleep(60*60)
 	return
 
 #def shorten_link(link):
