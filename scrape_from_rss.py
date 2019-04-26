@@ -69,6 +69,7 @@ else:
 						  'etag': ''}
 					}
 
+posted = 0
 for feed in feed_info.keys():	
 	#print(feed)
 	feed_name = feed_info[feed]['name']
@@ -97,6 +98,7 @@ for feed in feed_info.keys():
 				helpers.write_to_db(proba_out)
 				if proba_out[0,-1] >=0.5:
 					helpers.tweet_post('%s (proba: %.3f) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[0,-1],entry.link))
+					posted = posted + 1
 			#print('%d: %s' % (i,row[0]))
-
+print('%d tweets posted.' % posted)
 json.dump(feed_info, open("feed_info.txt",'w'))
