@@ -1,7 +1,7 @@
 import feedparser
-import csv
-import string
-from unidecode import unidecode
+#import csv
+#import string
+#from unidecode import unidecode
 import json
 from os.path import isfile
 import helpers
