@@ -70,7 +70,7 @@ else:
 					}
 
 for feed in feed_info.keys():	
-	print(feed)
+	#print(feed)
 	feed_name = feed_info[feed]['name']
 	feed_path = feed_info[feed]['path']
 	feed_etag = feed_info[feed]['etag']
@@ -82,9 +82,9 @@ for feed in feed_info.keys():
 		feed_rss = feedparser.parse(feed_path, etag=feed_etag)
 		
 	if feed_rss.status == 304:
-		print('No new items in %s since last update.' % feed_name)
+		#print('No new items in %s since last update.' % feed_name)
 	else:
-		print('Number of RSS posts : %d' % len(feed_rss.entries))	
+		#print('Number of RSS posts : %d' % len(feed_rss.entries))	
 #		with open('paper-titles-unseen-%s.csv' % feed, mode='w') as data_file:
 #			file_writer =  csv.writer(data_file, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 		for i in range(len(feed_rss.entries)):
@@ -92,7 +92,7 @@ for feed in feed_info.keys():
 			row = [[helpers.normalize_text(entry.title), entry.link, feed_name]] # 2D array of size (1,3)
 			if not helpers.post_in_db(row):
 				proba_out = helpers.compute_proba(row)
-				print(proba_out)
+				#print(proba_out)
 				helpers.write_to_db(proba_out)
 				if proba_out[0,-1] >=0.5:
 					helpers.tweet_post('%s (proba: %.3f) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[0,-1],entry.link))
