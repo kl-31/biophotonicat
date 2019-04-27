@@ -111,9 +111,13 @@ def tweet_post(line):
 	auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 	auth.set_access_token(access_token, access_token_secret)
 	api = tweepy.API(auth)	
-	api.update_status(line)
-	sleep(60*60)
-	return
+	try:
+		api.update_status(line)
+		sleep(60*60)
+		return True
+	except tweepy.TweepError as e:
+		print(e.args[0][0]['message'])
+		return False
 
 #def shorten_link(link):
 #	b = bitly_api.Connection(API_USER, API_KEY)
