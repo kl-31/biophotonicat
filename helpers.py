@@ -22,7 +22,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 #import bitly_api
 #import sys
 
-def post_in_db(row):
+def check_in_db(row):
 	scope = ['https://spreadsheets.google.com/feeds',
 		  'https://www.googleapis.com/auth/drive']
 	creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
@@ -50,6 +50,7 @@ def write_to_db(row):
 	sh = client.open_by_key('1PoD8M5_fg33gdAktthKXrsyPwHMqSMASDRIX1i_zYtk')
 	worksheet = sh.sheet1
 	worksheet.insert_row(row,1)
+	sleep(0.5) # google api 60 write requests per 60 sec
 
 #	path = 'database.txt'
 #	if isfile(path):
