@@ -97,7 +97,7 @@ for feed in feed_info.keys():
 				#print(proba_out)
 				helpers.write_to_db(proba_out)
 				if proba_out[-1] >=0.5:
-					if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[0,-1]* 100,entry.link)):
+					if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link)):
 						   posted = posted + 1
 			#print('%d: %s' % (i,row[0]))
 print('%d tweets posted.' % posted)
