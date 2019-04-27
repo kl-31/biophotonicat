@@ -1,1 +1,67 @@
-{"optica": {"name": "Optica", "path": "http://metadata.osa.org/rss/infobase/optica_feed.xml", "etag": "\"1f5e333a6dfbd41:0\""}, "lsa": {"name": "Light: Science and Applications", "path": "http://feeds.nature.com/lsa/rss/current?fmt=xml", "etag": "sHEyRjC3mklsSUb3Y+d36EEAYEM"}, "nat_photon": {"name": "Nature Photonics", "path": "http://www.nature.com/nphoton/journal/vaop/ncurrent/rss.rdf", "etag": "\"6d6241706c955b7a305009fd73a89499\""}, "oe": {"name": "Optics Express", "path": "http://metadata.osa.org/rss/infobase/opex_feed.xml", "etag": "\"0cc52246dfbd41:0\""}, "boe": {"name": "Biomedical Optics Express", "path": "http://metadata.osa.org/rss/infobase/boe_feed.xml", "etag": "\"f1beb6266dfbd41:0\""}, "ol": {"name": "Optics Letters", "path": "http://metadata.osa.org/rss/infobase/ol_feed.xml", "etag": "\"8027931c6dfbd41:0\""}, "nat_meth": {"name": "Nature Methods", "path": "http://www.nature.com/nmeth/journal/vaop/ncurrent/rss.rdf", "etag": "\"ff2bc1dd769250af3f3ae24b6b0d6026\""}, "nat_bme": {"name": "Nature BME", "path": "http://feeds.nature.com/natbiomedeng/rss/current?fmt=xml", "etag": "jjPyUKKWbQpw59aoOqhv8Yyz//0"}, "science": {"name": "Science", "path": "http://science.sciencemag.org/rss/express.xml", "etag": "W/\"6025cf7-8389-5874b3e345275\""}, "nat_comms": {"name": "Nature Communications", "path": "http://feeds.nature.com/ncomms/rss/current?fmt=xml", "etag": "K8E8zEBwTFi6jlmrCLaiLbMJ8nc"}, "science_advances": {"name": "Science Advances", "path": "https://advances.sciencemag.org/rss/current.xml", "etag": "W/\"4a786b-30f3b-587506ea873ce\""}}
+{
+  "optica": {
+    "name": "Optica",
+    "path": "http://metadata.osa.org/rss/infobase/optica_feed.xml",
+    "etag": "\"1f5e333a6dfbd41:0\""
+  },
+  "lsa": {
+    "name": "Light: Science and Applications",
+    "path": "http://feeds.nature.com/lsa/rss/current?fmt=xml",
+    "etag": "sHEyRjC3mklsSUb3Y+d36EEAYEM"
+  },
+  "nat_photon": {
+    "name": "Nature Photonics",
+    "path": "http://www.nature.com/nphoton/journal/vaop/ncurrent/rss.rdf",
+    "etag": "\"6d6241706c955b7a305009fd73a89499\""
+  },
+  "oe": {
+    "name": "Optics Express",
+    "path": "http://metadata.osa.org/rss/infobase/opex_feed.xml",
+    "etag": "\"0cc52246dfbd41:0\""
+  },
+  "boe": {
+    "name": "Biomedical Optics Express",
+    "path": "http://metadata.osa.org/rss/infobase/boe_feed.xml",
+    "etag": "\"f1beb6266dfbd41:0\""
+  },
+  "ol": {
+    "name": "Optics Letters",
+    "path": "http://metadata.osa.org/rss/infobase/ol_feed.xml",
+    "etag": "\"8027931c6dfbd41:0\""
+  },
+  "nat_meth": {
+    "name": "Nature Methods",
+    "path": "http://www.nature.com/nmeth/journal/vaop/ncurrent/rss.rdf",
+    "etag": "\"ff2bc1dd769250af3f3ae24b6b0d6026\""
+  },
+  "nat_bme": {
+    "name": "Nature BME",
+    "path": "http://feeds.nature.com/natbiomedeng/rss/current?fmt=xml",
+    "etag": "jjPyUKKWbQpw59aoOqhv8Yyz//0"
+  },
+  "science": {
+    "name": "Science",
+    "path": "http://science.sciencemag.org/rss/express.xml",
+    "etag": "W/\"6025cf7-8389-5874b3e345275\""
+  },
+  "nat_comms": {
+    "name": "Nature Communications",
+    "path": "http://feeds.nature.com/ncomms/rss/current?fmt=xml",
+    "etag": "K8E8zEBwTFi6jlmrCLaiLbMJ8nc"
+  },
+  "science_advances": {
+    "name": "Science Advances",
+    "path": "https://advances.sciencemag.org/rss/current.xml",
+    "etag": "W/\"4a786b-30f3b-587506ea873ce\""
+  },
+  "scientific reports": {
+    "name": "Scientific Reports",
+    "path": "http://feeds.nature.com/srep/rss/current?fmt=xml",
+    "etag": ""
+  },
+  "pnas": {
+    "name": "PNAS Engineering",
+    "path": "https://feeds.feedburner.com/ProceedingsOfTheNationalAcademyOfSciencesEngineering?fmt=xml",
+    "etag": ""
+  }
+}
