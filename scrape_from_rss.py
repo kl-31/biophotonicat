@@ -92,13 +92,13 @@ for feed in feed_info.keys():
 		for i in range(len(feed_rss.entries)):
 			entry = feed_rss.entries[i]
 			row = [[helpers.normalize_text(entry.title), entry.link, feed_name]] # 2D array of size (1,3)
-			if not helpers.post_in_db(row):
+			if not helpers.check_in_db(row):
 				proba_out = helpers.compute_proba(row)
 				#print(proba_out)
 				helpers.write_to_db(proba_out)
 				if proba_out[-1] >=0.5:
 					try:
-						helpers.tweet_post('%s (proba: %.3f) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[0,-1],entry.link))
+						helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[0,-1]* 100,entry.link))
 					except: 
 						pass
 					posted = posted + 1
