@@ -111,7 +111,7 @@ def tweet_post(line):
 	auth.set_access_token(access_token, access_token_secret)
 	api = tweepy.API(auth)	
 	api.update_status(line)
-	sleep(60)
+	sleep(60*60)
 	return
 
 #def shorten_link(link):
