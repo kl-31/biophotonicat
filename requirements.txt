@@ -3,4 +3,6 @@ pandas
 unidecode
 tweepy
 feedparser
+gspread
+oauth2client
 

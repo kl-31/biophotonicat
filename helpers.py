@@ -16,31 +16,50 @@ from os.path import isfile
 from credentials import *
 import tweepy
 from time import sleep
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
 #import bitly_api
 #import sys
 
 def post_in_db(row):
-	path = 'database.txt'
-	if isfile(path):
-		database = json.load(open(path))
-	else: 
-		return False
-
+	scope = ['https://spreadsheets.google.com/feeds',
+		  'https://www.googleapis.com/auth/drive']
+	creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+	client = gspread.authorize(creds)
+	sh = client.open_by_key('1PoD8M5_fg33gdAktthKXrsyPwHMqSMASDRIX1i_zYtk')
+	worksheet = sh.sheet1
+	titles_list = worksheet.col_values(1)	
 	title = row[0][0]
-	if title in database:
+	if title in titles_list:
 			return True
 	return False
+	
+#	path = 'database.txt'
+#	if isfile(path):
+#		database = json.load(open(path))
+#	else: 
+#		return False
+
+
 
 def write_to_db(row):
-	path = 'database.txt'
-	if isfile(path):
-		database = json.load(open(path))
-	else: database = {}
-	database[row[0][0]] = {}
-	database[row[0][0]]['link']= row[0][1]
-	database[row[0][0]]['journal_name']= row[0][2]
-	database[row[0][0]]['prob']= row[0][3]
-	json.dump(database, open(path,'w'))
+	scope = ['https://spreadsheets.google.com/feeds']
+	creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+	client = gspread.authorize(creds)
+	sh = client.open_by_key('1PoD8M5_fg33gdAktthKXrsyPwHMqSMASDRIX1i_zYtk')
+	worksheet = sh.sheet1
+	worksheet.insert_row(row,1)
+
+#	path = 'database.txt'
+#	if isfile(path):
+#		database = json.load(open(path))
+#	else: database = {}
+#	database[row[0][0]] = {}
+#	database[row[0][0]]['link']= row[0][1]
+#	database[row[0][0]]['journal_name']= row[0][2]
+#	database[row[0][0]]['prob']= row[0][3]
+#	json.dump(database, open(path,'w'))
 	return
 
 
@@ -63,11 +82,12 @@ def compute_proba(titles):
 	clf = joblib.load('trained_model.pkl')
 	
 	pred = clf.predict_proba(X_test)
-	arr = np.empty((np.size(titles,0),4),dtype=object)
-	arr[:,0] = np.array(titles['title'])
-	arr[:,1] = np.array(titles['link'])
-	arr[:,2] = np.array(titles['journal_name'])
-	arr[:,3] = pred[:,2]
+	#arr = np.empty((np.size(titles,0),4),dtype=object)
+	arr = [None] * 4
+	arr[0] = titles['title'][0]
+	arr[1] = titles['link'][0]
+	arr[2] = titles['journal_name'][0]
+	arr[3] = float(pred[:,2])
 	
 	# dont determine relevance in this function
 #	relevant = np.where([i[2]>=0.5 for i in pred])[0]
@@ -91,7 +111,7 @@ def tweet_post(line):
 	auth.set_access_token(access_token, access_token_secret)
 	api = tweepy.API(auth)	
 	api.update_status(line)
-	sleep(60*60)
+	sleep(60)
 	return
 
 #def shorten_link(link):
