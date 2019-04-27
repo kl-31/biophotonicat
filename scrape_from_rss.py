@@ -96,7 +96,7 @@ for feed in feed_info.keys():
 				proba_out = helpers.compute_proba(row)
 				#print(proba_out)
 				helpers.write_to_db(proba_out)
-				if proba_out[0,-1] >=0.5:
+				if proba_out[-1] >=0.5:
 					try:
 						helpers.tweet_post('%s (proba: %.3f) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[0,-1],entry.link))
 					except: 
@@ -104,4 +104,4 @@ for feed in feed_info.keys():
 					posted = posted + 1
 			#print('%d: %s' % (i,row[0]))
 print('%d tweets posted.' % posted)
-json.dump(feed_info, open("feed_info.txt",'w'))
+#json.dump(feed_info, open("feed_info.txt",'w'))
