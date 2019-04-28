@@ -30,6 +30,7 @@ def check_in_db(row):
 	sh = client.open_by_key('1PoD8M5_fg33gdAktthKXrsyPwHMqSMASDRIX1i_zYtk')
 	worksheet = sh.sheet1
 	titles_list = worksheet.col_values(1)	
+	sleep(1) # google api 60 read requests per 60 sec
 	title = row[0][0]
 	if title in titles_list:
 			return True
