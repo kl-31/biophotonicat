@@ -22,7 +22,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 #import bitly_api
 #import sys
 
-def check_in_db(row):
+def get_titles_db():
 	scope = ['https://spreadsheets.google.com/feeds',
 		  'https://www.googleapis.com/auth/drive']
 	creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
@@ -30,11 +30,12 @@ def check_in_db(row):
 	sh = client.open_by_key('1PoD8M5_fg33gdAktthKXrsyPwHMqSMASDRIX1i_zYtk')
 	worksheet = sh.sheet1
 	titles_list = worksheet.col_values(1)	
-	sleep(1) # google api 60 read requests per 60 sec
-	title = row[0][0]
-	if title in titles_list:
-			return True
-	return False
+	return titles_list
+#	sleep(1) # google api 60 read requests per 60 sec
+#	title = row[0][0]
+#	if title in titles_list:
+#			return True
+#	return False
 	
 #	path = 'database.txt'
 #	if isfile(path):

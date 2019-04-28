@@ -70,6 +70,7 @@ else:
 					}
 
 posted = 0
+titles_list = helpers.get_titles_db()
 for feed in feed_info.keys():	
 	#print(feed)
 	feed_name = feed_info[feed]['name']
@@ -92,7 +93,7 @@ for feed in feed_info.keys():
 		for i in range(len(feed_rss.entries)):
 			entry = feed_rss.entries[i]
 			row = [[helpers.normalize_text(entry.title), entry.link, feed_name]] # 2D array of size (1,3)
-			if not helpers.check_in_db(row):
+			if row[0][0] not in titles_list:
 				proba_out = helpers.compute_proba(row)
 				#print(proba_out)
 				helpers.write_to_db(proba_out)
