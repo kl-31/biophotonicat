@@ -1,7 +1,7 @@
 import feedparser
 #import csv
 #import string
-#from unidecode import unidecode
+from unidecode import unidecode
 import json
 from os.path import isfile
 import helpers
@@ -69,6 +69,7 @@ else:
 						  'etag': ''}
 					}
 
+written = 0
 posted = 0
 titles_list = helpers.get_titles_db()
 for feed in feed_info.keys():	
@@ -92,14 +93,16 @@ for feed in feed_info.keys():
 #			file_writer =  csv.writer(data_file, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 		for i in range(len(feed_rss.entries)):
 			entry = feed_rss.entries[i]
-			row = [[helpers.normalize_text(entry.title), entry.link, feed_name]] # 2D array of size (1,3)
+			row = [[unidecode(entry.title), entry.link, feed_name, entry.description]] # 2D array of size (1,3)
 			if row[0][0] not in titles_list:
 				proba_out = helpers.compute_proba(row)
 				#print(proba_out)
 				helpers.write_to_db(proba_out)
+				written = written + 1
 				if proba_out[-1] >=0.5:
 					if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link)):
 						   posted = posted + 1
 			#print('%d: %s' % (i,row[0]))
+print('%d rows written.' % written)
 print('%d tweets posted.' % posted)
 #json.dump(feed_info, open("feed_info.txt",'w'))

@@ -79,18 +79,19 @@ def normalize_text(s):
 def compute_proba(titles):
 	vectorizer = HashingVectorizer()
 	
-	titles = pd.DataFrame(titles,columns=['title','link','journal_name'])
+	titles = pd.DataFrame(titles,columns=['title','link','journal_name','abstract'])
 	titles['text'] = [normalize_text(str(s)) for s in titles['title']]
 	X_test = vectorizer.fit_transform(titles['text'])
 	clf = joblib.load('trained_model.pkl')
 	
 	pred = clf.predict_proba(X_test)
 	#arr = np.empty((np.size(titles,0),4),dtype=object)
-	arr = [None] * 4
+	arr = [None] * 5
 	arr[0] = titles['title'][0]
 	arr[1] = titles['link'][0]
 	arr[2] = titles['journal_name'][0]
-	arr[3] = float(pred[:,2])
+	arr[3] = titles['abstract'][0]
+	arr[4] = float(pred[:,2])
 	
 	# dont determine relevance in this function
 #	relevant = np.where([i[2]>=0.5 for i in pred])[0]
@@ -114,8 +115,8 @@ def tweet_post(line):
 	auth.set_access_token(access_token, access_token_secret)
 	api = tweepy.API(auth)	
 	try:
-		api.update_status(line)
-		sleep(60*60)
+		#api.update_status(line)
+		#sleep(1)
 		return True
 	except tweepy.TweepError as e:
 		print(e.args[0][0]['message'])
