@@ -63,5 +63,10 @@
     "name": "PNAS Engineering",
     "path": "https://feeds.feedburner.com/ProceedingsOfTheNationalAcademyOfSciencesEngineering?fmt=xml",
     "etag": ""
-  }
+  },
+   "arxiv": {
+    "name": "Arxiv Optics",
+    "path": "http://export.arxiv.org/rss/physics.optics",
+    "etag": ""
+   }
 }
