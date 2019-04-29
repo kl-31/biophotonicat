@@ -76,32 +76,37 @@ for feed in feed_info.keys():
 	#print(feed)
 	feed_name = feed_info[feed]['name']
 	feed_path = feed_info[feed]['path']
-	feed_etag = feed_info[feed]['etag']
-	if feed_etag == '':
-		feed_rss = feedparser.parse(feed_path)
-		feed_etag = feed_rss.etag
-		feed_info[feed]['etag'] = feed_rss.etag
-	else:
-		feed_rss = feedparser.parse(feed_path, etag=feed_etag)
-		
-	if feed_rss.status == 304:
-		#print('No new items in %s since last update.' % feed_name)
-		continue
-	else:
+	feed_rss = feedparser.parse(feed_path)
+#	feed_etag = feed_info[feed]['etag']
+#	if feed_etag == '':
+#		feed_rss = feedparser.parse(feed_path)
+#		feed_etag = feed_rss.etag
+#		feed_info[feed]['etag'] = feed_rss.etag
+#	else:
+#		feed_rss = feedparser.parse(feed_path, etag=feed_etag)
+#		
+#	if feed_rss.status == 304:
+#		#print('No new items in %s since last update.' % feed_name)
+#		continue
+#	else:
 		#print('Number of RSS posts : %d' % len(feed_rss.entries))	
 #		with open('paper-titles-unseen-%s.csv' % feed, mode='w') as data_file:
 #			file_writer =  csv.writer(data_file, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-		for i in range(len(feed_rss.entries)):
-			entry = feed_rss.entries[i]
-			row = [[unidecode(entry.title), entry.link, feed_name, entry.description]] # 2D array of size (1,3)
-			if row[0][0] not in titles_list:
-				proba_out = helpers.compute_proba(row)
-				#print(proba_out)
-				helpers.write_to_db(proba_out)
-				written = written + 1
-				if proba_out[-1] >=0.5:
-					if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link)):
-						   posted = posted + 1
+	for i in range(len(feed_rss.entries)):
+		entry = feed_rss.entries[i]
+		row = [[unidecode(entry.title), entry.link, feed_name, entry.description]] # 2D array of size (1,3)
+		if row[0][0] not in titles_list:
+			proba_out = helpers.compute_proba(row)
+			#print(proba_out)
+			helpers.write_to_db(proba_out)
+			written = written + 1
+			if proba_out[-1] >=0.5:
+				if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link)):
+						posted = posted + 1
+		if posted >=22: # 22 hours elapsed  
+		   break
+	if posted >=22: # 22 hours elapsed  
+		break
 			#print('%d: %s' % (i,row[0]))
 print('%d rows written.' % written)
 print('%d tweets posted.' % posted)
