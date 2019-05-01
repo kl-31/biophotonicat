@@ -103,6 +103,10 @@ for feed in feed_info.keys():
 			if proba_out[-1] >=0.5:
 				if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link)):
 						posted = posted + 1
+			elif proba_out[-1] < 0.5 and feed_name == 'Biomedical Optics Express':
+				if helpers.tweet_post('%s (relevance: %.0f%% but this is in BOEx so my model probably meowssed up) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link)):
+						posted = posted + 1
+				
 		if posted >=22: # 22 hours elapsed  
 		   break
 	if posted >=22: # 22 hours elapsed  
