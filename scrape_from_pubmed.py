@@ -18,13 +18,18 @@ from xml.etree.ElementTree import iterparse
 import csv
 import time
 import datetime
+import urllib.request as libreq
+import feedparser
+from unidecode import unidecode
+
+
 
 def search(query,retmax):
 	Entrez.email = 'your.email@example.com'
 	handle = Entrez.esearch(db='pubmed', 
 							sort='relevant', 
 							retmax=str(retmax),
-							#retstart = '10000',
+							retstart = '10',
 							retmode='xml', 
 							#reldate = '3650',
 							term=query)
@@ -37,41 +42,51 @@ def fetch_details(id_list):
 	handle = Entrez.efetch(db='pubmed',
                            retmode='xml',
                            id=ids)
-	#results = Entrez.read(handle)
-	return handle
+	results = Entrez.read(handle)
+	return results
 
 if __name__ == '__main__':
-
+	chunk_size = 100
+	# PUBMED QUERY
 	groups = [['physics', 'biology','engineering'],
-			   ['physics optics','engineering optics'],
-			   ['biomedical optics', 'biophotonics']]
+			   ['biomedical optics', 'biophotonics','biology optics','biomedical microscopy']]
 	start = time.time()
-	with open('paper-titles-data.csv', mode='w') as data_file:
+	with open('new-paper-titles-data.csv', mode='w') as data_file:
 		file_writer =  csv.writer(data_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 		for group in groups:
-			if groups.index(group)==0:
-				retmax=4000
-			else:
-				retmax = 6000
+			retmax = 10000
 			for query in group:
-				i = 0
+				num = 0
 				results = search(query,retmax)
 				id_list = results['IdList']
-				papers = fetch_details(id_list)
-				for event, elem in iterparse(papers):
+				
+				for chunk_i in range(0, len(id_list), chunk_size):
+					chunk = id_list[chunk_i:chunk_i + chunk_size]
 					try:
-						if elem.tag == 'ArticleTitle':
-							#print(str(i)+elem.text)
-							file_writer.writerow([elem.text, str(groups.index(group))])
-							i = i+1
-							elem.clear()
+						papers = fetch_details(chunk)
+						for i, paper in enumerate(papers['PubmedArticle']):
+							file_writer.writerow([unidecode(paper['MedlineCitation']['Article']['ArticleTitle']), str(2*groups.index(group))])
+							num = num+1
 					except:
 						pass
-				print('%d titles saved in %s.' % (i,query))
-	data_file.close()
+					#print('%d titles written.' % min(int(chunk_i + chunk_size), len(id_list)))
+				print('%d titles saved in %s.' % (num,query))
+	
+	# ARXIV QUERY
+		num=0
+		for chunk_i in range(0, 30000, chunk_size):
+			feed = feedparser.parse('http://export.arxiv.org/api/query?search_query=cat:physics.optics&start=%d&max_results=%d' % (chunk_i,chunk_size))
+			
+			for i in range(len(feed.entries)):
+				entry = feed.entries[i]
+				title = (entry.title).replace('\n', "")
+				file_writer.writerow([unidecode(title), str(1)])
+				num = num+1
+		print('%d titles saved from Arxiv physics.optics.' % num)	
+	
 	end = time.time()
 	print('Time elapsed: %s' % datetime.timedelta(seconds=round(end - start)))
-	
+	data_file.close()
 #		for i, paper in enumerate(papers['PubmedArticle']):
 #			#file_writer.writerow([paper['MedlineCitation']['Article']['ArticleTitle'], '1'])
 #			print("%d) %s" % (i+1, paper['MedlineCitation']['Article']['ArticleTitle']))
