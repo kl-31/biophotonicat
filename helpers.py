@@ -82,7 +82,7 @@ def compute_proba(titles):
 	titles = pd.DataFrame(titles,columns=['title','link','journal_name','abstract'])
 	titles['text'] = [normalize_text(str(s)) for s in titles['title']]
 	X_test = vectorizer.fit_transform(titles['text'])
-	clf = joblib.load('trained_model.pkl')
+	clf = joblib.load('new_trained_model.pkl')
 	
 	pred = clf.predict_proba(X_test)
 	#arr = np.empty((np.size(titles,0),4),dtype=object)
