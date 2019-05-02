@@ -48,7 +48,7 @@ def normalize_text(s):
 vectorizer = HashingVectorizer()
 
 # grab the data
-titles = pd.read_csv("!!paper-titles-data.csv", names=['title','category'])
+titles = pd.read_csv("new-paper-titles-data.csv", names=['title','category'])
 titles['text'] = [normalize_text(str(s)) for s in titles['title']]
 
 # unseen data
@@ -167,7 +167,7 @@ grid_clf = GridSearchCV(clf, param_grid = grid_values,scoring = 'recall_weighted
 grid_clf.fit(X_train, y_train)
 print('Best Score: ', grid_clf.best_score_)
 print('Best Params: ', grid_clf.best_params_)
-_ = joblib.dump(grid_clf, 'trained_model.pkl', compress=9)
+_ = joblib.dump(grid_clf, 'new_trained_model.pkl', compress=9)
 #Predict values based on new parameters
 y_pred = grid_clf.predict(X_test)
 score = metrics.accuracy_score(y_test, y_pred)
@@ -180,8 +180,12 @@ print(metrics.classification_report(y_test, y_pred,
 print("confusion matrix:")
 print(metrics.confusion_matrix(y_test, y_pred))
 #
-clf = joblib.load('trained_model.pkl')
-
+##compare to old model
+#clf = joblib.load('trained_model.pkl')
+#print("classification report:")
+#y_pred = clf.predict(X_test)
+#print(metrics.classification_report(y_test, y_pred,
+#											target_names=target_names))
 
 unseen_pred = clf.predict_proba(unseen)
 relevant = np.where([i[2]>=0.5 for i in unseen_pred])[0]
