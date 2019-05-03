@@ -73,5 +73,10 @@
     "name": "Biorxiv Biophys/Bioeng",
     "path": "http://connect.biorxiv.org/biorxiv_xml.php?subject=biophysics+bioengineering",
     "etag": ""
+   },
+   "jbiophoton": {
+    "name": "Journal of Biophotonics",
+    "path": "https://onlinelibrary.wiley.com/feed/18640648/most-recent",
+    "etag": ""
    }
 }
