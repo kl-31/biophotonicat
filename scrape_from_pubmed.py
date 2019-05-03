@@ -46,15 +46,15 @@ def fetch_details(id_list):
 	return results
 
 if __name__ == '__main__':
-	chunk_size = 100
+	chunk_size = 50
 	# PUBMED QUERY
 	groups = [['physics', 'biology','engineering'],
-			   ['biomedical optics', 'biophotonics','biology optics','biomedical microscopy']]
+			   ['biomedical optics', 'biophotonics','biology optics','optical biomedical microscopy']]
 	start = time.time()
-	with open('new-paper-titles-data.csv', mode='w') as data_file:
+	with open('new-paper-titles-data-v2.csv', mode='w') as data_file:
 		file_writer =  csv.writer(data_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 		for group in groups:
-			retmax = 10000
+			retmax = 15000
 			for query in group:
 				num = 0
 				results = search(query,retmax)

@@ -52,9 +52,9 @@ titles = pd.read_csv("new-paper-titles-data.csv", names=['title','category'])
 titles['text'] = [normalize_text(str(s)) for s in titles['title']]
 
 # unseen data
-unseen_pd = pd.read_csv("paper-titles-unseen-optica.csv",names=['title','link','journal_name'],sep='\t',encoding ='latin1')
-unseen_pd['text'] = [normalize_text(str(s)) for s in unseen_pd['title']]
-unseen = vectorizer.fit_transform(unseen_pd['text'])
+#unseen_pd = pd.read_csv("paper-titles-unseen-optica.csv",names=['title','link','journal_name'],sep='\t',encoding ='latin1')
+#unseen_pd['text'] = [normalize_text(str(s)) for s in unseen_pd['title']]
+#unseen = vectorizer.fit_transform(unseen_pd['text'])
 
 
 
@@ -184,22 +184,24 @@ print(metrics.confusion_matrix(y_test, y_pred))
 #clf = joblib.load('trained_model.pkl')
 #print("classification report:")
 #y_pred = clf.predict(X_test)
+#score = metrics.accuracy_score(y_test, y_pred)
+#print("accuracy:   %0.3f" % score)
 #print(metrics.classification_report(y_test, y_pred,
 #											target_names=target_names))
 
-unseen_pred = clf.predict_proba(unseen)
-relevant = np.where([i[2]>=0.5 for i in unseen_pred])[0]
-irrelevant = np.where([i[2]<0.5 for i in unseen_pred])[0]
-#print(unseen_pred)
-relevant_arr = np.empty((len(relevant),4),dtype=object)
-relevant_arr[:,0] = np.array(unseen_pd.loc[relevant,'title'])
-relevant_arr[:,1] = np.array(unseen_pd.loc[relevant,'link'])
-relevant_arr[:,2] = np.array(unseen_pd.loc[relevant,'journal_name'])
-relevant_arr[:,3] = unseen_pred[relevant,2]
-print(relevant_arr)
-print('%d relevant papers found.' % len(relevant))
-print(np.array(unseen_pd.loc[irrelevant,'title']))
-print('%d irrelevant papers found.' % len(irrelevant))
+#unseen_pred = clf.predict_proba(unseen)
+#relevant = np.where([i[2]>=0.5 for i in unseen_pred])[0]
+#irrelevant = np.where([i[2]<0.5 for i in unseen_pred])[0]
+##print(unseen_pred)
+#relevant_arr = np.empty((len(relevant),4),dtype=object)
+#relevant_arr[:,0] = np.array(unseen_pd.loc[relevant,'title'])
+#relevant_arr[:,1] = np.array(unseen_pd.loc[relevant,'link'])
+#relevant_arr[:,2] = np.array(unseen_pd.loc[relevant,'journal_name'])
+#relevant_arr[:,3] = unseen_pred[relevant,2]
+#print(relevant_arr)
+#print('%d relevant papers found.' % len(relevant))
+#print(np.array(unseen_pd.loc[irrelevant,'title']))
+#print('%d irrelevant papers found.' % len(irrelevant))
 
 
 
