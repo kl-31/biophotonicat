@@ -37,6 +37,7 @@ def get_titles_db():
     'token_uri': environ['GSPREAD_TOKEN_URI'],
     'type': environ['GSPREAD_TYPE']
 	}
+	print(keyfile_dict)
 	creds = ServiceAccountCredentials.from_json_keyfile_dict(
     keyfile_dict=keyfile_dict, scopes=scopes)
 	#creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
