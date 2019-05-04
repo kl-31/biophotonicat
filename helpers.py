@@ -39,7 +39,7 @@ def get_titles_db():
 	}
 	#print(keyfile_dict)
 	creds = ServiceAccountCredentials.from_json_keyfile_dict(
-    keyfile_dict=keyfile_dict, scopes=scopes)
+    keyfile_dict=keyfile_dict,token_uri=environ['GSPREAD_TOKEN_URI'], scopes=scopes)
 	#creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
 	client = gspread.authorize(creds)
 	sh = client.open_by_key('1PoD8M5_fg33gdAktthKXrsyPwHMqSMASDRIX1i_zYtk')
