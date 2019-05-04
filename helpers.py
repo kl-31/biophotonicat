@@ -14,7 +14,6 @@ import string
 import json
 from os.path import isfile
 from os import environ
-from credentials import *
 import tweepy
 from time import sleep
 import gspread
