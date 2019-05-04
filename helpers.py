@@ -22,10 +22,9 @@ from oauth2client.service_account import ServiceAccountCredentials
 #import bitly_api
 #import sys
 
-def get_titles_db():
-	scopes = ['https://spreadsheets.google.com/feeds',
-		  'https://www.googleapis.com/auth/drive']
-	keyfile_dict = {
+scopes = ['https://spreadsheets.google.com/feeds',
+	  'https://www.googleapis.com/auth/drive']
+keyfile_dict = {
     'auth_provider_x509_cert_url': environ['GSPREAD_AUTH_PROVIDER'],
     'auth_uri': environ['GSPREAD_AUTH_URI'],
     'client_email': environ['GSPREAD_CLIENT_EMAIL'],
@@ -36,8 +35,11 @@ def get_titles_db():
     'project_id': environ['GSPREAD_PROJECT_ID'],
     'token_uri': environ['GSPREAD_TOKEN_URI'],
     'type': environ['GSPREAD_TYPE']
-	}
-	print(keyfile_dict)
+}
+
+
+def get_titles_db():
+	#print(keyfile_dict)
 	creds = ServiceAccountCredentials.from_json_keyfile_dict(
     keyfile_dict=keyfile_dict, scopes=scopes)
 	#creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
@@ -61,20 +63,6 @@ def get_titles_db():
 
 
 def write_to_db(row):
-	scopes = ['https://spreadsheets.google.com/feeds',
-		  'https://www.googleapis.com/auth/drive']
-	keyfile_dict = {
-    'auth_provider_x509_cert_url': environ['GSPREAD_AUTH_PROVIDER'],
-    'auth_uri': environ['GSPREAD_AUTH_URI'],
-    'client_email': environ['GSPREAD_CLIENT_EMAIL'],
-    'client_id': environ['GSPREAD_CLIENT_ID'],
-    'client_x509_cert_url': environ['GSPREAD_CLIENT_X509'],
-    'private_key': environ['GSPREAD_PRIVATE_KEY'],
-    'private_key_id': environ['GSPREAD_PRIVATE_KEY_ID'],
-    'project_id': environ['GSPREAD_PROJECT_ID'],
-    'token_uri': environ['GSPREAD_TOKEN_URI'],
-    'type': environ['GSPREAD_TYPE']
-	}
 	creds = ServiceAccountCredentials.from_json_keyfile_dict(
     keyfile_dict=keyfile_dict, scopes=scopes)
 	#creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
