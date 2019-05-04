@@ -13,6 +13,7 @@ from unidecode import unidecode
 import string
 import json
 from os.path import isfile
+from os import environ
 from credentials import *
 import tweepy
 from time import sleep
@@ -23,9 +24,23 @@ from oauth2client.service_account import ServiceAccountCredentials
 #import sys
 
 def get_titles_db():
-	scope = ['https://spreadsheets.google.com/feeds',
+	scopes = ['https://spreadsheets.google.com/feeds',
 		  'https://www.googleapis.com/auth/drive']
-	creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+	keyfile_dict = {
+    'auth_provider_x509_cert_url': environ['GSPREAD_AUTH_PROVIDER'],
+    'auth_uri': environ['GSPREAD_AUTH_URI'],
+    'client_email': environ['GSPREAD_CLIENT_EMAIL'],
+    'client_id': environ['GSPREAD_CLIENT_ID'],
+    'client_x509_cert_url': environ['GSPREAD_CLIENT_X509'],
+    'private_key': environ['GSPREAD_PRIVATE_KEY'],
+    'private_key_id': environ['GSPREAD_PRIVATE_KEY_ID'],
+    'project_id': environ['GSPREAD_PROJECT_ID'],
+    'token_uri': environ['GSPREAD_TOKEN_URI'],
+    'type': environ['GSPREAD_TYPE']
+	}
+	creds = ServiceAccountCredentials.from_json_keyfile_dict(
+    keyfile_dict=keyfile_dict, scopes=scopes)
+	#creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
 	client = gspread.authorize(creds)
 	sh = client.open_by_key('1PoD8M5_fg33gdAktthKXrsyPwHMqSMASDRIX1i_zYtk')
 	worksheet = sh.sheet1
@@ -46,8 +61,23 @@ def get_titles_db():
 
 
 def write_to_db(row):
-	scope = ['https://spreadsheets.google.com/feeds']
-	creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+	scopes = ['https://spreadsheets.google.com/feeds',
+		  'https://www.googleapis.com/auth/drive']
+	keyfile_dict = {
+    'auth_provider_x509_cert_url': environ['GSPREAD_AUTH_PROVIDER'],
+    'auth_uri': environ['GSPREAD_AUTH_URI'],
+    'client_email': environ['GSPREAD_CLIENT_EMAIL'],
+    'client_id': environ['GSPREAD_CLIENT_ID'],
+    'client_x509_cert_url': environ['GSPREAD_CLIENT_X509'],
+    'private_key': environ['GSPREAD_PRIVATE_KEY'],
+    'private_key_id': environ['GSPREAD_PRIVATE_KEY_ID'],
+    'project_id': environ['GSPREAD_PROJECT_ID'],
+    'token_uri': environ['GSPREAD_TOKEN_URI'],
+    'type': environ['GSPREAD_TYPE']
+	}
+	creds = ServiceAccountCredentials.from_json_keyfile_dict(
+    keyfile_dict=keyfile_dict, scopes=scopes)
+	#creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
 	client = gspread.authorize(creds)
 	sh = client.open_by_key('1PoD8M5_fg33gdAktthKXrsyPwHMqSMASDRIX1i_zYtk')
 	worksheet = sh.sheet1
@@ -111,8 +141,8 @@ def compute_proba(titles):
 	
 
 def tweet_post(line):
-	auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-	auth.set_access_token(access_token, access_token_secret)
+	auth = tweepy.OAuthHandler(environ['TWITTER_CONSUMER_KEY'], environ['TWITTER_CONSUMER_SECRET'])
+	auth.set_access_token(environ['TWITTER_ACCESS_TOKEN'], environ['TWITTER_ACCESS_SECRET'])
 	api = tweepy.API(auth)	
 	try:
 		api.update_status(line)
