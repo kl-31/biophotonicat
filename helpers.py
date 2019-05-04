@@ -31,7 +31,7 @@ def get_titles_db():
     'client_email': environ['GSPREAD_CLIENT_EMAIL'],
     'client_id': environ['GSPREAD_CLIENT_ID'],
     'client_x509_cert_url': environ['GSPREAD_CLIENT_X509'],
-    'private_key': environ['GSPREAD_PRIVATE_KEY'],
+    'private_key': environ['GSPREAD_PRIVATE_KEY'].replace('\\n', '\n'),
     'private_key_id': environ['GSPREAD_PRIVATE_KEY_ID'],
     'project_id': environ['GSPREAD_PROJECT_ID'],
     'token_uri': environ['GSPREAD_TOKEN_URI'],
