@@ -6,19 +6,6 @@ import json
 from os.path import isfile
 import helpers
 
-
-
-#def cleanup(s):
-##	s=''.join([i for i in s if not i.isdigit()]) # remove numbers
-#	s = s.replace('-',' ')
-#	s = s.replace('/',' ')
-#	s = s.replace('μ','u')
-#	s = unidecode(str(s))
-	
-#	s=s.translate(s.maketrans('', '', string.punctuation)) # remove punctuation
-#	s = s.lower() # make lowercase
-	#return s
-
 if isfile('feed_info.txt'):
 	feed_info = json.load(open("feed_info.txt"))
 else:
@@ -90,8 +77,6 @@ for feed in feed_info.keys():
 #		continue
 #	else:
 		#print('Number of RSS posts : %d' % len(feed_rss.entries))	
-#		with open('paper-titles-unseen-%s.csv' % feed, mode='w') as data_file:
-#			file_writer =  csv.writer(data_file, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 	for i in range(len(feed_rss.entries)):
 		entry = feed_rss.entries[i]
 		row = [[unidecode(entry.title), entry.link, feed_name, entry.description]] # 2D array of size (1,3)
@@ -103,8 +88,8 @@ for feed in feed_info.keys():
 			if proba_out[-1] >=0.5:
 				if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link)):
 						posted = posted + 1
-			elif proba_out[-1] < 0.5 and feed_name == 'Biomedical Optics Express':
-				if helpers.tweet_post('%s (relevance: %.0f%% but this is in BOEx so my model probably meowssed up) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link)):
+			elif proba_out[-1] < 0.5 and (feed_name == 'Biomedical Optics Express' or feed_name == 'Journal of Biophotonics'):
+				if helpers.tweet_post('%s (relevance: %.0f%% but this is in %s so my model probably meowssed up) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100, feed_name, entry.link)):
 						posted = posted + 1
 				
 		if posted >=22: # 22 hours elapsed  
@@ -114,4 +99,3 @@ for feed in feed_info.keys():
 			#print('%d: %s' % (i,row[0]))
 print('%d rows written.' % written)
 print('%d tweets posted.' % posted)
-#json.dump(feed_info, open("feed_info.txt",'w'))

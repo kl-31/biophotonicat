@@ -48,19 +48,6 @@ def get_titles_db():
 	worksheet = sh.sheet1
 	titles_list = worksheet.col_values(1)	
 	return titles_list
-#	sleep(1) # google api 60 read requests per 60 sec
-#	title = row[0][0]
-#	if title in titles_list:
-#			return True
-#	return False
-	
-#	path = 'database.txt'
-#	if isfile(path):
-#		database = json.load(open(path))
-#	else: 
-#		return False
-
-
 
 def write_to_db(row):
 	creds = ServiceAccountCredentials.from_json_keyfile_dict(
@@ -71,16 +58,6 @@ def write_to_db(row):
 	worksheet = sh.sheet1
 	worksheet.insert_row(row,1)
 	sleep(1) # google api 60 write requests per 60 sec
-
-#	path = 'database.txt'
-#	if isfile(path):
-#		database = json.load(open(path))
-#	else: database = {}
-#	database[row[0][0]] = {}
-#	database[row[0][0]]['link']= row[0][1]
-#	database[row[0][0]]['journal_name']= row[0][2]
-#	database[row[0][0]]['prob']= row[0][3]
-#	json.dump(database, open(path,'w'))
 	return
 
 
@@ -110,21 +87,6 @@ def compute_proba(titles):
 	arr[2] = titles['journal_name'][0]
 	arr[3] = titles['abstract'][0]
 	arr[4] = float(pred[:,2])
-	
-	# dont determine relevance in this function
-#	relevant = np.where([i[2]>=0.5 for i in pred])[0]
-#	irrelevant = np.where([i[2]<0.5 for i in pred])[0]
-#	#print(pred)
-#	relevant_arr = np.empty((len(relevant),4),dtype=object)
-#	relevant_arr[:,0] = np.array(titles.loc[relevant,'title'])
-#	relevant_arr[:,1] = np.array(titles.loc[relevant,'link'])
-#	relevant_arr[:,2] = np.array(titles.loc[relevant,'journal_name'])
-#	relevant_arr[:,3] = pred[relevant,2]
-#	print(relevant_arr)
-#	print('%d relevant papers found.' % len(relevant))
-#	print(np.array(titles.loc[irrelevant,'title']))
-#	print('%d irrelevant papers found.' % len(irrelevant))
-	
 	return arr
 	
 
