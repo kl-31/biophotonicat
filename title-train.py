@@ -33,7 +33,7 @@ from sklearn.ensemble import RandomForestClassifier,AdaBoostClassifier, Gradient
 from sklearn.utils.extmath import density
 from sklearn import metrics
 from sklearn.externals import joblib
-from time import time
+import time
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -44,12 +44,12 @@ def normalize_text(s):
 	s=s.translate(s.maketrans('', '', string.punctuation)) # remove punctuation
 	s = s.lower() # make lowercase
 	return s
-
-vectorizer = HashingVectorizer()
+start = time.time()
+vectorizer = HashingVectorizer(ngram_range=(1, 3))
 
 # grab the data
-titles = pd.read_csv("new-paper-titles-data.csv", names=['title','category'])
-titles['text'] = [normalize_text(str(s)) for s in titles['title']]
+titles = pd.read_csv("new-paper-titles-data-abstracts3.csv", names=['title','abstract','category'])
+titles['text'] = [normalize_text(str(s)) for s in titles['title']+titles['abstract']]
 
 # unseen data
 #unseen_pd = pd.read_csv("paper-titles-unseen-optica.csv",names=['title','link','journal_name'],sep='\t',encoding ='latin1')
@@ -63,7 +63,7 @@ titles['text'] = [normalize_text(str(s)) for s in titles['title']]
 # split into train and test sets
 data_train, data_test, y_train, y_test = train_test_split(titles['text'], titles['category'], test_size=0.2)
 
-target_names = ['0','1','2']
+target_names = ['0','1']
 
 # pull the data into vectors
 
@@ -161,8 +161,12 @@ X_test = vectorizer.fit_transform(data_test)
 #
 #clf = LogisticRegression()
 #benchmark(clf)
-clf = LogisticRegression()
-grid_values = {'penalty': ['l1', 'l2'],'C':[0.001,.009,0.01,.09,1,5,10,25]}
+clf = SGDClassifier()
+
+grid_values =  {'loss':['log','modified_huber'],'penalty':['l2', 'l1', 'elasticnet'],'alpha':[1E-2, 1E-3, 1E-4, 1E-5,1E-6,1E-7],'learning_rate':['constant','optimal','invscaling'],'eta0':[1E-2, 1E-3, 1E-4, 1E-5,1E-6,1E-7]}
+
+#clf = LogisticRegression()
+#grid_values = {'penalty': ['l1', 'l2'],'C':[0.001,.009,0.01,.09,1,5,10,25]}
 grid_clf = GridSearchCV(clf, param_grid = grid_values,scoring = 'recall_weighted')
 grid_clf.fit(X_train, y_train)
 print('Best Score: ', grid_clf.best_score_)
@@ -203,5 +207,7 @@ print(metrics.confusion_matrix(y_test, y_pred))
 #print(np.array(unseen_pd.loc[irrelevant,'title']))
 #print('%d irrelevant papers found.' % len(irrelevant))
 
+end = time.time()
+print('time elapsed: %s' % datetime.timedelta(seconds=round(end - start)))
 
 

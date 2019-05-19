@@ -48,10 +48,10 @@ def fetch_details(id_list):
 if __name__ == '__main__':
 	chunk_size = 50
 	# PUBMED QUERY
-	groups = [['physics', 'biology','engineering'],
-			   ['biomedical optics', 'biophotonics','biology optics','optical biomedical microscopy']]
+	groups = [['physics','engineering','cell biology','medical imaging'],
+			   ['biomedical optics express', 'journal of biophotonics','journal of biomedical optics', 'optical imaging','biophotonics','biomedical optics']]
 	start = time.time()
-	with open('new-paper-titles-data-v2.csv', mode='w') as data_file:
+	with open('new-paper-titles-data-abstracts3.csv', mode='w') as data_file:
 		file_writer =  csv.writer(data_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 		for group in groups:
 			retmax = 15000
@@ -65,7 +65,9 @@ if __name__ == '__main__':
 					try:
 						papers = fetch_details(chunk)
 						for i, paper in enumerate(papers['PubmedArticle']):
-							file_writer.writerow([unidecode(paper['MedlineCitation']['Article']['ArticleTitle']), str(2*groups.index(group))])
+							#print(paper)
+							file_writer.writerow([unidecode(paper['MedlineCitation']['Article']['ArticleTitle']),
+								unidecode(paper['MedlineCitation']['Article']['Abstract']['AbstractText'][0]), groups.index(group)])
 							num = num+1
 					except:
 						pass
@@ -79,8 +81,9 @@ if __name__ == '__main__':
 			
 			for i in range(len(feed.entries)):
 				entry = feed.entries[i]
-				title = (entry.title).replace('\n', "")
-				file_writer.writerow([unidecode(title), str(1)])
+				title = (entry.title).replace('\n', " ")
+				abstract = (entry.summary).replace('\n', " ")
+				file_writer.writerow([unidecode(title), unidecode(abstract), str(0)])
 				num = num+1
 		print('%d titles saved from Arxiv physics.optics.' % num)	
 	
