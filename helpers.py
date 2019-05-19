@@ -19,6 +19,7 @@ from time import sleep
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import re
+import datetime
 #import bitly_api
 #import sys
 
@@ -56,7 +57,7 @@ def write_to_db(row):
 	client = gspread.authorize(creds)
 	sh = client.open_by_key('1PoD8M5_fg33gdAktthKXrsyPwHMqSMASDRIX1i_zYtk')
 	worksheet = sh.sheet1
-	worksheet.insert_row(row,1)
+	worksheet.insert_row(row+[str(datetime.date.today())],1)
 	sleep(1) # google api 60 write requests per 60 sec
 	return
 
