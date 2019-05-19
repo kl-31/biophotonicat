@@ -79,16 +79,16 @@ for feed in feed_info.keys():
 		#print('Number of RSS posts : %d' % len(feed_rss.entries))	
 	for i in range(len(feed_rss.entries)):
 		entry = feed_rss.entries[i]
-		row = [[unidecode(entry.title), entry.link, feed_name, entry.description]] # 2D array of size (1,3)
+		row = [[unidecode(entry.title)+' ', entry.link, feed_name, unidecode(entry.summary.replace('\n',' '))]] # 2D array of size (1,3)
 		if row[0][0] not in titles_list:
 			proba_out = helpers.compute_proba(row)
 			#print(proba_out)
 			helpers.write_to_db(proba_out)
 			written = written + 1
-			if proba_out[-1] >=0.5:
+			if proba_out[-1] >=0.6:
 				if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link)):
 						posted = posted + 1
-			elif proba_out[-1] < 0.5 and (feed_name == 'Biomedical Optics Express' or feed_name == 'Journal of Biophotonics'):
+			elif proba_out[-1] < 0.6 and (feed_name == 'Biomedical Optics Express' or feed_name == 'Journal of Biophotonics'):
 				if helpers.tweet_post('%s (relevance: %.0f%% but this is in %s so my model probably meowssed up) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100, feed_name, entry.link)):
 						posted = posted + 1
 				

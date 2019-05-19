@@ -18,7 +18,7 @@ import tweepy
 from time import sleep
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-
+import re
 #import bitly_api
 #import sys
 
@@ -72,10 +72,10 @@ def normalize_text(s):
 	return s
 
 def compute_proba(titles):
-	vectorizer = HashingVectorizer()
+	vectorizer = HashingVectorizer(ngram_range=(1, 3))
 	
 	titles = pd.DataFrame(titles,columns=['title','link','journal_name','abstract'])
-	titles['text'] = [normalize_text(str(s)) for s in titles['title']]
+	titles['text'] = [normalize_text(re.sub(r'\([^()]*\)', '', str(s))) for s in titles['title']+titles['abstract']]
 	X_test = vectorizer.fit_transform(titles['text'])
 	clf = joblib.load('new_trained_model.pkl')
 	
@@ -86,7 +86,7 @@ def compute_proba(titles):
 	arr[1] = titles['link'][0]
 	arr[2] = titles['journal_name'][0]
 	arr[3] = titles['abstract'][0]
-	arr[4] = float(pred[:,2])
+	arr[4] = float(pred[:,1])
 	return arr
 	
 
