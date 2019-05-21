@@ -5,4 +5,5 @@ tweepy
 feedparser
 gspread
 oauth2client
+bs4
 
