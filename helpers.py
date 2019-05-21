@@ -75,9 +75,10 @@ def normalize_text(s):
 	return s
 
 def strip_html(s):
-		soup = BeautifulSoup(s,'lxml')
-		soup.p.decompose()
-		s = soup.get_text() 
+		if s[:3]=='<p>':
+			soup = BeautifulSoup(s,'lxml')
+			soup.p.decompose()
+			s = soup.get_text() 
 		return s
 
 def compute_proba(titles):
