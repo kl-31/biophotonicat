@@ -5,7 +5,7 @@ from unidecode import unidecode
 import json
 from os.path import isfile
 import helpers
-from bs4 import BeautifulSoup
+
 
 if isfile('feed_info.txt'):
 	feed_info = json.load(open("feed_info.txt"))
@@ -81,10 +81,7 @@ for feed in feed_info.keys():
 	for i in range(len(feed_rss.entries)):
 		entry = feed_rss.entries[i]
 		abstract = unidecode(entry.summary.replace('\n',' '))
-		soup = BeautifulSoup(abstract,'lxml')
-		soup.p.decompose()
-		abstract = soup.get_text() 
-		row = [[unidecode(entry.title)+' ', entry.link, feed_name, abstract ]] # 2D array of size (1,3)
+		row = [[unidecode(entry.title)+' ', entry.link, feed_name, abstract ]] # adding a space after title
 		if row[0][0] not in titles_list:
 			proba_out = helpers.compute_proba(row)
 			#print(proba_out)

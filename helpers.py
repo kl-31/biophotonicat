@@ -20,6 +20,8 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import re
 import datetime
+from bs4 import BeautifulSoup
+
 #import bitly_api
 #import sys
 
@@ -72,13 +74,20 @@ def normalize_text(s):
 	s = s.lower() # make lowercase
 	return s
 
+def strip_html(s):
+		soup = BeautifulSoup(s,'lxml')
+		soup.p.decompose()
+		s = soup.get_text() 
+		return s
+
 def compute_proba(titles):
 	vectorizer = HashingVectorizer(ngram_range=(1, 3))
 	
 	titles = pd.DataFrame(titles,columns=['title','link','journal_name','abstract'])
 	titles['abstract'] = [re.sub(r'^(.*?)<br\/>','',str(s)) for s in titles['abstract']] # remove all text up to and including <br\>
 	titles['abstract'] = [re.sub(r'\[[^\[\]]*\]','',str(s)) for s in titles['abstract']] # remove all text within [] brackets
-	titles['text'] = [normalize_text(re.sub(r'\([^()]*\)', '', str(s))) for s in titles['title']+titles['abstract']]
+	titles['abstract'] = [strip_html(s) for s in titles['abstract']]
+	titles['text'] = [normalize_text(re.sub(r'\([^()]*\)', '', str(s))) for s in titles['title']+titles['abstract']] # already has a space after title
 	X_test = vectorizer.fit_transform(titles['text'])
 	clf = joblib.load('new_trained_model.pkl')
 	
