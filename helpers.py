@@ -76,6 +76,8 @@ def compute_proba(titles):
 	vectorizer = HashingVectorizer(ngram_range=(1, 3))
 	
 	titles = pd.DataFrame(titles,columns=['title','link','journal_name','abstract'])
+	titles['abstract'] = [re.sub(r'^(.*?)<br\/>','',str(s)) for s in titles['abstract']] # remove all text up to and including <br\>
+	titles['abstract'] = [re.sub(r'\[[^\[\]]*\]','',str(s)) for s in titles['abstract']] # remove all text within [] brackets
 	titles['text'] = [normalize_text(re.sub(r'\([^()]*\)', '', str(s))) for s in titles['title']+titles['abstract']]
 	X_test = vectorizer.fit_transform(titles['text'])
 	clf = joblib.load('new_trained_model.pkl')
@@ -96,8 +98,8 @@ def tweet_post(line):
 	auth.set_access_token(environ['TWITTER_ACCESS_TOKEN'], environ['TWITTER_ACCESS_SECRET'])
 	api = tweepy.API(auth)	
 	try:
-		api.update_status(line)
-		sleep(60*60)
+		#api.update_status(line)
+		#sleep(60*60)
 		return True
 	except tweepy.TweepError as e:
 		print(e.args[0][0]['message'])
