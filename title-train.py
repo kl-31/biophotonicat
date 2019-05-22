@@ -41,8 +41,10 @@ import numpy as np
 def normalize_text(s):
 	s=''.join([i for i in s if not i.isdigit()]) # remove numbers
 	s = s.replace('-',' ')
+	s = s.replace('/',' ')
 	s=s.translate(s.maketrans('', '', string.punctuation)) # remove punctuation
 	s = s.lower() # make lowercase
+	s = s.replace('  ',' ') # remove double spaces
 	return s
 start = time.time()
 vectorizer = HashingVectorizer(ngram_range=(1, 3))
@@ -161,7 +163,7 @@ X_test = vectorizer.fit_transform(data_test)
 #
 #clf = LogisticRegression()
 #benchmark(clf)
-clf = SGDClassifier()
+clf = SGDClassifier(max_iter=5, tol=None)
 
 grid_values =  {'loss':['log','modified_huber'],'penalty':['l2', 'l1', 'elasticnet'],'alpha':[1E-2, 1E-3, 1E-4, 1E-5,1E-6,1E-7],'learning_rate':['constant','optimal','invscaling'],'eta0':[1E-2, 1E-3, 1E-4, 1E-5,1E-6,1E-7]}
 

@@ -72,6 +72,7 @@ def normalize_text(s):
 	s = unidecode(str(s))
 	s=s.translate(s.maketrans('', '', string.punctuation)) # remove punctuation
 	s = s.lower() # make lowercase
+	s = s.replace('  ',' ') # remove double spaces
 	return s
 
 def strip_html(s):
