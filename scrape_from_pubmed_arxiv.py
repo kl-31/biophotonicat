@@ -76,17 +76,20 @@ if __name__ == '__main__':
 				print('%d titles saved in %s.' % (num,query))
 	
 	# ARXIV QUERY
-		num=0
-		for chunk_i in range(0, 30000, chunk_size):
-			feed = feedparser.parse('http://export.arxiv.org/api/query?search_query=cat:physics.optics&start=%d&max_results=%d' % (chunk_i,chunk_size))
-			
-			for i in range(len(feed.entries)):
-				entry = feed.entries[i]
-				title = (entry.title).replace('\n', " ")
-				abstract = (entry.summary).replace('\n', " ")
-				file_writer.writerow([unidecode(title), unidecode(abstract), str(0)])
-				num = num+1
-		print('%d titles saved from Arxiv physics.optics.' % num)	
+		
+		queries = ['cat:physics.optics', 'all:optics']
+		for query in queries:
+			num=0
+			for chunk_i in range(0, 20000, chunk_size):
+				feed = feedparser.parse('http://export.arxiv.org/api/query?search_query=%s&start=%d&max_results=%d' % (query,chunk_i,chunk_size))
+				
+				for i in range(len(feed.entries)):
+					entry = feed.entries[i]
+					title = (entry.title).replace('\n', " ")
+					abstract = (entry.summary).replace('\n', " ")
+					file_writer.writerow([unidecode(title), unidecode(abstract), str(0)])
+					num = num+1
+			print('%d titles saved from Arxiv %s.' % (num,query))	
 	
 	end = time.time()
 	print('Time elapsed: %s' % datetime.timedelta(seconds=round(end - start)))

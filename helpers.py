@@ -76,7 +76,7 @@ def normalize_text(s):
 	return s
 
 def strip_html(s):
-		if s[:3]=='<p>':
+		if s[:3]=='<p>' and not s[-4:]=='</p>': # differentiate between Nature and Science abstract formats
 			soup = BeautifulSoup(s,'lxml')
 			soup.p.decompose()
 			s = soup.get_text() 
