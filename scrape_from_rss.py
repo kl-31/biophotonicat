@@ -91,7 +91,7 @@ for feed in feed_info.keys():
 				if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link)):
 						posted = posted + 1
 			elif proba_out[-1] < 0.6 and (feed_name == 'Biomedical Optics Express' or feed_name == 'Journal of Biophotonics'):
-				if helpers.tweet_post('%s (relevance: %.0f%% but this is in %s so my model probably meowssed up) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100, feed_name, entry.link)):
+				if helpers.tweet_post('%s (relevance: %.0f%% but probably meowssed up) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100, entry.link)):
 						posted = posted + 1
 				
 		if posted >=22: # 22 hours elapsed  
