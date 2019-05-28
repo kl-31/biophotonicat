@@ -12,8 +12,8 @@ import numpy as np
 from unidecode import unidecode
 import string
 import json
-from os.path import isfile,splitext
-from os import environ,remove
+from os.path import isfile,splitext,isdir
+from os import environ,remove,makedirs
 import tweepy
 from time import sleep
 import gspread
@@ -23,6 +23,10 @@ import datetime
 from bs4 import BeautifulSoup
 import urllib
 from subprocess import call
+from shutil import rmtree
+import patoolib
+import glob
+from random import choice
 
 #import bitly_api
 #import sys
@@ -88,17 +92,42 @@ def scrape_image(raw, journal):
 	if raw == '':
 		return False
 	
-	if isfile('./tweet_pic.png'):
-		remove('./tweet_pic.png')
+	if isdir('./data/'):
+		rmtree('./data/')
 		
 	if journal == "Journal of Biophotonics":
+		makedirs('./data/',exist_ok=True)
 		soup = BeautifulSoup(raw,'lxml')
 		link = soup.find_all('img', src=True)[0]['src']
 		extension = splitext(urllib.parse.urlparse(link).path)[-1]
-		urllib.request.urlretrieve(link,'./tweet_pic'+extension)
-		call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./tweet_pic'+extension,'./tweet_pic.png'])
+		urllib.request.urlretrieve(link,'./data/tweet_pic'+extension)
+		call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/tweet_pic'+extension,'./data/tweet_pic.png'])
+	elif journal == "Arxiv Optics":
+		makedirs('./data/',exist_ok=True)
+		urllib.request.urlretrieve(raw.replace('abs','e-print'),'source')
+		if isdir('./data/'):
+			rmtree('./data/')
+		makedirs('./data/',exist_ok=True)
+		try:	
+			patoolib.extract_archive("source", outdir="./data/")
+		except:
+			return False	
+	#	if glob.glob('./data/' + '**/*.tex', recursive=True) !=[]:
+		files = glob.glob('./data/' + '**/*.png', recursive=True)
+		if files != []:
+			picraw = choice(files)
+			call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off', picraw+'[0]','./data/tweet_pic.png'])
+			return True
+		else:
+			otherfiles = glob.glob('./data/' + '**/*.pdf', recursive=True) + glob.glob('./data/' + '**/*.eps', recursive=True) + glob.glob('./data/' + '**/*.ps', recursive=True)
+			if otherfiles != []:
+				picraw = choice(otherfiles)
+				call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off', picraw+'[0]','./data/tweet_pic.png'])
+				return True
+			else:
+				return False		
 	
-	if isfile('./tweet_pic.png'):
+	if isfile('./data/tweet_pic.png'):
 		return True
 	else:
 		return False
@@ -135,7 +164,7 @@ def tweet_post(line,image_flag):
 			sleep(30*60) #30 mins for arxiv
 			return True
 		else:
-			api.update_with_media('./tweet_pic.png',line)
+			api.update_with_media('./data/tweet_pic.png',line)
 			sleep(30*60) #30 mins for arxiv
 			return True
 	except tweepy.TweepError as e:

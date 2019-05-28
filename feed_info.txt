@@ -1,4 +1,9 @@
 {
+   "jbiophoton": {
+    "name": "Journal of Biophotonics",
+    "path": "https://onlinelibrary.wiley.com/feed/18640648/most-recent",
+    "etag": ""
+   },
   "optica": {
     "name": "Optica",
     "path": "http://metadata.osa.org/rss/infobase/optica_feed.xml",
@@ -72,11 +77,6 @@
    "biorxiv": {
     "name": "Biorxiv Biophys/Bioeng",
     "path": "http://connect.biorxiv.org/biorxiv_xml.php?subject=biophysics+bioengineering",
-    "etag": ""
-   },
-   "jbiophoton": {
-    "name": "Journal of Biophotonics",
-    "path": "https://onlinelibrary.wiley.com/feed/18640648/most-recent",
     "etag": ""
    }
 }
