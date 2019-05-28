@@ -110,7 +110,9 @@ def scrape_image(raw, journal):
 		paper_id = urllib.parse.urlparse(raw).path.split('/')[-1]
 		paper_path = 'https://www.biorxiv.org/content/10.1101/' + paper_id + '.full'
 		soup = BeautifulSoup(urllib.request.urlopen(paper_path).read(),'lxml')
-		links_raw = soup.find_all('a',{'class':'highwire-figure-link highwire-figure-link-download'})	
+		links_raw = soup.find_all('a',{'class':'highwire-figure-link highwire-figure-link-download'})
+		if len(links_raw) == 0:
+			return False
 		links = []
 		for link in links_raw:
 			links.append(link['href'])
