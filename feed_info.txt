@@ -1,4 +1,9 @@
 {
+   "arxiv": {
+    "name": "Arxiv Optics",
+    "path": "http://export.arxiv.org/rss/physics.optics",
+    "etag": ""
+   },
    "jbiophoton": {
     "name": "Journal of Biophotonics",
     "path": "https://onlinelibrary.wiley.com/feed/18640648/most-recent",
@@ -69,11 +74,7 @@
     "path": "https://feeds.feedburner.com/ProceedingsOfTheNationalAcademyOfSciencesEngineering?fmt=xml",
     "etag": ""
   },
-   "arxiv": {
-    "name": "Arxiv Optics",
-    "path": "http://export.arxiv.org/rss/physics.optics",
-    "etag": ""
-   },
+
    "biorxiv": {
     "name": "Biorxiv Biophys/Bioeng",
     "path": "http://connect.biorxiv.org/biorxiv_xml.php?subject=biophysics+bioengineering",
