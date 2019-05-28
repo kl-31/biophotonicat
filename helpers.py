@@ -105,6 +105,21 @@ def scrape_image(raw, journal):
 		extension = splitext(urllib.parse.urlparse(link).path)[-1]
 		urllib.request.urlretrieve(link,'./data/tweet_pic'+extension)
 		call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/tweet_pic'+extension,'./data/tweet_pic.png'])
+
+	elif journal == "Biorxiv Biophys/Bioeng":
+		paper_id = urllib.parse.urlparse(raw).path.split('/')[-1]
+		paper_path = 'https://www.biorxiv.org/content/10.1101/' + paper_id + '.full'
+		soup = BeautifulSoup(urllib.request.urlopen(paper_path).read(),'lxml')
+		links_raw = soup.find_all('a',{'class':'highwire-figure-link highwire-figure-link-download'})	
+		links = []
+		for link in links_raw:
+			links.append(link['href'])
+		pic_raw = choice(links)
+		urllib.request.urlretrieve(pic_raw,'./data/pic_raw'+'.jpg')
+		call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/pic_raw.jpg','./data/tweet_pic.png'])
+
+		
+		
 	elif journal == "Arxiv Optics":
 		makedirs('./data/',exist_ok=True)
 		urllib.request.urlretrieve(raw.replace('abs','e-print'),'source')

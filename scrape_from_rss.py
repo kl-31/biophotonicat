@@ -82,7 +82,7 @@ for feed in feed_info.keys():
 		entry = feed_rss.entries[i]
 		if feed_name == 'Journal of Biophotonics': # for each journal, there is a raw source/link from which image can be pulled.
 			image_raw = entry.content[0].value
-		elif feed_name == 'Arxiv Optics':
+		elif feed_name == 'Arxiv Optics' or "Biorxiv Biophys/Bioeng":
 			image_raw = entry.link
 		else:
 			image_raw = ''
