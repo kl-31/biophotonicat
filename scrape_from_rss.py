@@ -80,6 +80,10 @@ for feed in feed_info.keys():
 		#print('Number of RSS posts : %d' % len(feed_rss.entries))	
 	for i in range(len(feed_rss.entries)):
 		entry = feed_rss.entries[i]
+		if feed_name == 'Journal of Biophotonics':
+			image_raw = entry.content[0].value
+		else:
+			image_raw = ''
 		abstract = unidecode(entry.summary.replace('\n',' '))
 		row = [[unidecode(entry.title)+' ', entry.link, feed_name, abstract ]] # adding a space after title
 		if row[0][0] not in titles_list:
@@ -88,10 +92,10 @@ for feed in feed_info.keys():
 			helpers.write_to_db(proba_out)
 			written = written + 1
 			if proba_out[-1] >=0.6:
-				if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link)):
+				if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link),helpers.scrape_image(image_raw,feed_name)):
 						posted = posted + 1
 			elif proba_out[-1] < 0.6 and (feed_name == 'Biomedical Optics Express' or feed_name == 'Journal of Biophotonics'):
-				if helpers.tweet_post('%s (relevance: %.0f%% but probably meowssed up) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100, entry.link)):
+				if helpers.tweet_post('%s (relevance: %.0f%% but probably meowssed up) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100, entry.link),helpers.scrape_image(image_raw,feed_name)):
 						posted = posted + 1
 				
 		if posted >=22: # 22 hours elapsed  

@@ -12,8 +12,8 @@ import numpy as np
 from unidecode import unidecode
 import string
 import json
-from os.path import isfile
-from os import environ
+from os.path import isfile,splitext
+from os import environ,remove
 import tweepy
 from time import sleep
 import gspread
@@ -21,6 +21,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 import re
 import datetime
 from bs4 import BeautifulSoup
+import urllib
+from subprocess import call
 
 #import bitly_api
 #import sys
@@ -81,6 +83,22 @@ def strip_html(s):
 			soup.p.decompose()
 			s = soup.get_text() 
 		return s
+	
+def scrape_image(raw, journal):
+	if isfile('./tweet_pic.png'):
+		remove('./tweet_pic.png')
+		
+	if journal == "Journal of Biophotonics":
+		soup = BeautifulSoup(raw,'lxml')
+		link = soup.find_all('img', src=True)[0]['src']
+		extension = splitext(urllib.parse.urlparse(link).path)[-1]
+		urllib.request.urlretrieve(link,'./tweet_pic'+extension)
+		call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./tweet_pic'+extension,'./tweet_pic.png'])
+	
+	if isfile('./tweet_pic.png'):
+		return True
+	else:
+		return False
 
 def compute_proba(titles):
 	vectorizer = HashingVectorizer(ngram_range=(1, 3))
@@ -104,14 +122,19 @@ def compute_proba(titles):
 	return arr
 	
 
-def tweet_post(line):
+def tweet_post(line,image_flag):
 	auth = tweepy.OAuthHandler(environ['TWITTER_CONSUMER_KEY'], environ['TWITTER_CONSUMER_SECRET'])
 	auth.set_access_token(environ['TWITTER_ACCESS_TOKEN'], environ['TWITTER_ACCESS_SECRET'])
 	api = tweepy.API(auth)	
 	try:
-		api.update_status(line)
-		sleep(60*60)
-		return True
+		if image_flag == False:
+			api.update_status(line)
+			sleep(30*60) #30 mins for arxiv
+			return True
+		else:
+			api.update_with_media('./tweet_pic.png',line)
+			sleep(30*60) #30 mins for arxiv
+			return True
 	except tweepy.TweepError as e:
 		print(e.args[0][0]['message'])
 		return False
