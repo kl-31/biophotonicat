@@ -96,9 +96,11 @@ def scrape_image(raw, journal):
 		rmtree('./data/')
 		
 	if journal == "Journal of Biophotonics":
-		print(raw)
+		#print(raw)
 		makedirs('./data/',exist_ok=True)
 		soup = BeautifulSoup(raw,'lxml')
+		if len(soup.find_all('img', src=True))==0:
+			return False
 		link = soup.find_all('img', src=True)[0]['src']
 		extension = splitext(urllib.parse.urlparse(link).path)[-1]
 		urllib.request.urlretrieve(link,'./data/tweet_pic'+extension)
