@@ -80,8 +80,10 @@ for feed in feed_info.keys():
 		#print('Number of RSS posts : %d' % len(feed_rss.entries))	
 	for i in range(len(feed_rss.entries)):
 		entry = feed_rss.entries[i]
-		if feed_name == 'Journal of Biophotonics':
+		if feed_name == 'Journal of Biophotonics': # for each journal, there is a raw source/link from which image can be pulled.
 			image_raw = entry.content[0].value
+		elif feed_name == 'Arxiv Optics':
+			image_raw = entry.link
 		else:
 			image_raw = ''
 		abstract = unidecode(entry.summary.replace('\n',' '))
