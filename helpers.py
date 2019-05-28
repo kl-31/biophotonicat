@@ -85,6 +85,9 @@ def strip_html(s):
 		return s
 	
 def scrape_image(raw, journal):
+	if raw == '':
+		return False
+	
 	if isfile('./tweet_pic.png'):
 		remove('./tweet_pic.png')
 		
