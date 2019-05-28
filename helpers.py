@@ -164,11 +164,11 @@ def tweet_post(line,image_flag):
 	try:
 		if image_flag == False:
 			api.update_status(line)
-			sleep(30*60) #30 mins for arxiv
+			sleep(60*60) 
 			return True
 		else:
 			api.update_with_media('./data/tweet_pic.png',line)
-			sleep(30*60) #30 mins for arxiv
+			sleep(60*60) 
 			return True
 	except tweepy.TweepError as e:
 		print(e.args[0][0]['message'])
