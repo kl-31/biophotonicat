@@ -96,6 +96,7 @@ def scrape_image(raw, journal):
 		rmtree('./data/')
 		
 	if journal == "Journal of Biophotonics":
+		print(raw)
 		makedirs('./data/',exist_ok=True)
 		soup = BeautifulSoup(raw,'lxml')
 		link = soup.find_all('img', src=True)[0]['src']
