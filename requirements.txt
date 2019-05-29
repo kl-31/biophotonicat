@@ -9,3 +9,4 @@ bs4
 lxml
 patool
 PyPDF2
+PyMuPDF
