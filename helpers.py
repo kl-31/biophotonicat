@@ -57,6 +57,7 @@ def get_titles_db():
 	sh = client.open_by_key('1PoD8M5_fg33gdAktthKXrsyPwHMqSMASDRIX1i_zYtk')
 	worksheet = sh.sheet1
 	titles_list = worksheet.col_values(1)	
+	titles_list = [s.strip().lower() for s in titles_list]
 	return titles_list
 
 def write_to_db(row):

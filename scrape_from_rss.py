@@ -88,7 +88,7 @@ for feed in feed_info.keys():
 			image_raw = ''
 		abstract = unidecode(entry.summary.replace('\n',' '))
 		row = [[unidecode(entry.title), entry.link, feed_name, abstract ]] 
-		if row[0][0] not in titles_list:
+		if row[0][0].strip().lower() not in titles_list:
 			proba_out = helpers.compute_proba(row)
 			#print(proba_out)
 			helpers.write_to_db(proba_out)
