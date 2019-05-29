@@ -26,7 +26,8 @@ from subprocess import call
 from shutil import rmtree
 import patoolib
 import glob
-from random import choice
+from random import choice, randint
+from PyPDF2 import PdfFileReader
 
 #import bitly_api
 #import sys
@@ -107,18 +108,26 @@ def scrape_image(raw, journal):
 		call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/tweet_pic'+extension,'./data/tweet_pic.png'])
 
 	elif journal == "Biorxiv Biophys/Bioeng":
+		makedirs('./data/',exist_ok=True)
 		paper_id = urllib.parse.urlparse(raw).path.split('/')[-1]
 		paper_path = 'https://www.biorxiv.org/content/10.1101/' + paper_id + '.full'
 		soup = BeautifulSoup(urllib.request.urlopen(paper_path).read(),'lxml')
 		links_raw = soup.find_all('a',{'class':'highwire-figure-link highwire-figure-link-download'})
 		if len(links_raw) == 0:
-			return False
-		links = []
-		for link in links_raw:
-			links.append(link['href'])
-		pic_raw = choice(links)
-		urllib.request.urlretrieve(pic_raw,'./data/pic_raw'+'.jpg')
-		call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/pic_raw.jpg','./data/tweet_pic.png'])
+			pdf_raw = soup.find_all('meta',{'name':'citation_pdf_url'})
+			pdf_raw = pdf_raw[0]['content']
+			urllib.request.urlretrieve(pdf_raw,'./data/paper'+'.pdf')
+			pdf = PdfFileReader(open('./data/paper.pdf','rb'))
+			n_pages = pdf.getNumPages()
+			page_num = randint(0,n_pages)
+			call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/paper.pdf['+ str(page_num)+']','./data/tweet_pic.png'])
+		else:
+			links = []
+			for link in links_raw:
+				links.append(link['href'])
+			pic_raw = choice(links)
+			urllib.request.urlretrieve(pic_raw,'./data/pic_raw'+'.jpg')
+			call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/pic_raw.jpg','./data/tweet_pic.png'])
 
 		
 		
