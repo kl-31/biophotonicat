@@ -115,6 +115,7 @@ def scrape_image(raw, journal):
 		soup = BeautifulSoup(urllib.request.urlopen(paper_path).read(),'lxml')
 		links_raw = soup.find_all('a',{'class':'highwire-figure-link highwire-figure-link-download'})
 		if len(links_raw) == 0:
+			print('Biorxiv: no full text images, so extracting PDF...')
 			pdf_raw = soup.find_all('meta',{'name':'citation_pdf_url'})
 			pdf_raw = pdf_raw[0]['content']
 			urllib.request.urlretrieve(pdf_raw,'./data/paper'+'.pdf')
@@ -127,7 +128,9 @@ def scrape_image(raw, journal):
 				if len(doc.getPageImageList(i)) > 0:
 					img_pgs.append(str(i)) # pages with images
 			if len(img_pgs) > 0:
-				call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/paper.pdf['+ choice(img_pgs)+']','./data/tweet_pic.png'])
+				pg_choice = choice(img_pgs)
+				call(['convert','-density','200','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/paper.pdf['+ pg_choice+']','./data/tweet_pic.png'])
+				print('Page %s saved as image.' % pg_choice)
 			else:
 				return False
 		else:
