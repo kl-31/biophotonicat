@@ -28,7 +28,7 @@ import patoolib
 import glob
 from random import choice, randint
 from PyPDF2 import PdfFileReader
-
+import fitz
 #import bitly_api
 #import sys
 
@@ -117,10 +117,18 @@ def scrape_image(raw, journal):
 			pdf_raw = soup.find_all('meta',{'name':'citation_pdf_url'})
 			pdf_raw = pdf_raw[0]['content']
 			urllib.request.urlretrieve(pdf_raw,'./data/paper'+'.pdf')
-			pdf = PdfFileReader(open('./data/paper.pdf','rb'))
-			n_pages = pdf.getNumPages()
-			page_num = randint(0,n_pages)
-			call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/paper.pdf['+ str(page_num)+']','./data/tweet_pic.png'])
+			#pdf = PdfFileReader(open('./data/paper.pdf','rb'))
+			#n_pages = pdf.getNumPages()
+			#page_num = randint(0,n_pages)
+			doc = fitz.open('./data/paper.pdf')
+			img_pgs = []
+			for i in range(len(doc)):
+				if len(doc.getPageImageList(i)) > 0:
+					img_pgs.append(str(i)) # pages with images
+			if len(img_pgs) > 0:
+				call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/paper.pdf['+ choice(img_pgs)+']','./data/tweet_pic.png'])
+			else:
+				return False
 		else:
 			links = []
 			for link in links_raw:
