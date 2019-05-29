@@ -152,7 +152,20 @@ def scrape_image(raw, journal):
 		try:	
 			patoolib.extract_archive("source", outdir="./data/")
 		except:
-			return False	
+			print('Arxiv: eprint not a zip file, so probably PDF.')
+			doc = fitz.open('source')
+			img_pgs = []
+			for i in range(len(doc)):
+				if len(doc.getPageImageList(i)) > 0:
+					img_pgs.append(str(i)) # pages with images
+			if len(img_pgs) > 0:
+				pg_choice = choice(img_pgs)
+				call(['convert','-density','200','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/paper.pdf['+ pg_choice+']','./data/tweet_pic.png'])
+				print('Page %s saved as image.' % pg_choice)
+			else:
+				return False
+			
+			#return False	
 	#	if glob.glob('./data/' + '**/*.tex', recursive=True) !=[]:
 		files = glob.glob('./data/' + '**/*.png', recursive=True)
 		if files != []:
