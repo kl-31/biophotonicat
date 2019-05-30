@@ -4,12 +4,16 @@
     "path": "http://connect.biorxiv.org/biorxiv_xml.php?subject=biophysics+bioengineering",
     "etag": ""
    },
+  "boe": {
+    "name": "Biomedical Optics Express",
+    "path": "http://metadata.osa.org/rss/infobase/boe_feed.xml",
+    "etag": "\"f1beb6266dfbd41:0\""
+  },
    "arxiv": {
     "name": "Arxiv Optics",
     "path": "http://export.arxiv.org/rss/physics.optics",
     "etag": ""
    },
-
   "optica": {
     "name": "Optica",
     "path": "http://metadata.osa.org/rss/infobase/optica_feed.xml",
@@ -29,11 +33,6 @@
     "name": "Optics Express",
     "path": "http://metadata.osa.org/rss/infobase/opex_feed.xml",
     "etag": "\"0cc52246dfbd41:0\""
-  },
-  "boe": {
-    "name": "Biomedical Optics Express",
-    "path": "http://metadata.osa.org/rss/infobase/boe_feed.xml",
-    "etag": "\"f1beb6266dfbd41:0\""
   },
   "ol": {
     "name": "Optics Letters",
