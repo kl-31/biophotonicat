@@ -10,3 +10,5 @@ lxml
 patool
 PyPDF2
 PyMuPDF
+html2text
+fuzzywuzzy

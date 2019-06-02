@@ -29,6 +29,8 @@ import glob
 from random import choice, randint
 from PyPDF2 import PdfFileReader
 import fitz
+import html2text
+import fuzzywuzzy as fuzz
 #import bitly_api
 #import sys
 
@@ -89,6 +91,64 @@ def strip_html(s):
 			soup.p.decompose()
 			s = soup.get_text() 
 		return s
+
+def get_author_handles(raw_author_list,journal):
+	# twitter followers
+	auth = tweepy.OAuthHandler(environ['TWITTER_CONSUMER_KEY'], environ['TWITTER_CONSUMER_SECRET'])
+	auth.set_access_token(environ['TWITTER_ACCESS_TOKEN'], environ['TWITTER_ACCESS_SECRET'])
+	api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)	
+	ids = []
+	names = []
+	handles = []
+	accounts = ['rita_strack','joachimgoedhart']
+	for account in accounts:
+		for page in tweepy.Cursor(api.followers_ids, screen_name=account).pages():
+			ids.extend(page)
+			sleep(5)
+	ids = list(set(ids)) # dedupe
+	#print(len(ids))
+	for chunk_i in range(0,len(ids),100):
+		users_obj = api.lookup_users(ids[chunk_i:chunk_i+100])
+		names.extend([unidecode(user.name) for user in users_obj])
+		handles.extend(['@'+user.screen_name for user in users_obj])
+		sleep(5)
+	author_handles_data = dict(zip(names,handles))	
+	
+	handles_all = ''
+	if journal == 'Biorxiv Biophys/Bioeng' or journal == 'Science' or journal == 'Science Advances':
+		raw_author_list_split=raw_author_list[0]['name'].split(', ')
+		author_list = []
+#		for i in range(0,len(raw_author_list_split),2):
+#			author_list.append(raw_author_list_split[i+1].replace('.','')+' '+raw_author_list_split[i])	
+#		# names are given in initials and last name. need to change format of twitter names.
+#		for key in author_handles_data.keys():
+#			lastname = str(key).split(' ')[-1]
+#			if len(str(key).split(' ')) > 1:
+#				initials = ' '.join([s[0] for s in str(key).split(' ')[:-1]])
+#			else:
+#				initials = ''
+#			name = initials + ' ' + lastname
+#			author_handles_data[name] = author_handles_data.pop(key)
+	elif journal == "Arxiv Optics":
+		h = html2text.HTML2Text()
+		h.ignore_links = True	
+		author_list = h.handle(raw_author_list[0]['name'])
+		author_list = (author_list).replace('\n',' ').split(', ')
+	elif journal == "Journal of Biophotonics":
+		author_list=raw_author_list[0]['name'].replace('\n','').split(', ')
+	elif journal == "PNAS Engineering":
+		author_list=raw_author_list[0]['name'].split(', ')
+	else: 
+		#journal == 'Nature Photonics' or journal == 'Nature Methods' or journal == 'Nature' or journal == 'Nature Communications' or journal == "Light: Science and Applications" or journal == 'Nature BME':
+		author_list = [s['name'] for s in raw_author_list]
+
+	for handle_query in author_handles_data.keys():
+		for author in author_list:
+			if fuzz.ratio(normalize_text(author),normalize_text(handle_query)) > 90:
+				handles_all = handles_all + author_handles_data[handle_query] + ' '
+				#print(author+' matched with ' +handle_query)
+				break
+	return handles_all
 	
 def scrape_image(raw, journal):
 	if raw == '':

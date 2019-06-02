@@ -65,19 +65,6 @@ for feed in feed_info.keys():
 	feed_name = feed_info[feed]['name']
 	feed_path = feed_info[feed]['path']
 	feed_rss = feedparser.parse(feed_path)
-#	feed_etag = feed_info[feed]['etag']
-#	if feed_etag == '':
-#		feed_rss = feedparser.parse(feed_path)
-#		feed_etag = feed_rss.etag
-#		feed_info[feed]['etag'] = feed_rss.etag
-#	else:
-#		feed_rss = feedparser.parse(feed_path, etag=feed_etag)
-#		
-#	if feed_rss.status == 304:
-#		#print('No new items in %s since last update.' % feed_name)
-#		continue
-#	else:
-		#print('Number of RSS posts : %d' % len(feed_rss.entries))	
 	for i in range(len(feed_rss.entries)):
 		entry = feed_rss.entries[i]
 		if feed_name == 'Journal of Biophotonics': # for each journal, there is a raw source/link from which image can be pulled.
@@ -93,11 +80,12 @@ for feed in feed_info.keys():
 			#print(proba_out)
 			helpers.write_to_db(proba_out)
 			written = written + 1
+			handles = helpers.get_author_handles(entry.authors,feed_name)
 			if proba_out[-1] >=0.6:
-				if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link),helpers.scrape_image(image_raw,feed_name)):
+				if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics %s' % (entry.title, proba_out[-1]* 100,entry.link,handles),helpers.scrape_image(image_raw,feed_name)):
 						posted = posted + 1
 			elif proba_out[-1] < 0.6 and (feed_name == 'Biomedical Optics Express' or feed_name == 'Journal of Biophotonics'):
-				if helpers.tweet_post('%s (relevance: %.0f%% but probably meowssed up) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100, entry.link),helpers.scrape_image(image_raw,feed_name)):
+				if helpers.tweet_post('%s (relevance: %.0f%% but cat probably meowssed up) %s #biophotonics #biomedicaloptics %s' % (entry.title, proba_out[-1]* 100, entry.link,handles),helpers.scrape_image(image_raw,feed_name)):
 						posted = posted + 1
 				
 		if posted >=22: # 22 hours elapsed  
