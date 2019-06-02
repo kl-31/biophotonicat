@@ -189,7 +189,7 @@ def scrape_image(raw, journal):
 					img_pgs.append(str(i)) # pages with images
 			if len(img_pgs) > 0:
 				pg_choice = choice(img_pgs)
-				call(['convert','-density','200','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/paper.pdf['+ pg_choice+']','./data/tweet_pic.png'])
+				call(['convert','-density','150','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/paper.pdf['+ pg_choice+']','./data/tweet_pic.png'])
 				print('Page %s saved as image.' % pg_choice)
 			else:
 				return False
@@ -278,7 +278,10 @@ def tweet_post(line,image_flag):
 			sleep(55*60) 
 			return True
 		else:
-			api.update_with_media('./data/tweet_pic.png',line)
+			try:
+				api.update_with_media('./data/tweet_pic.png',line)
+			except:
+				api.update_status(line)
 			sleep(55*60) 
 			return True
 	except tweepy.TweepError as e:
