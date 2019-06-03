@@ -69,10 +69,19 @@ for feed in feed_info.keys():
 		entry = feed_rss.entries[i]
 		if feed_name == 'Journal of Biophotonics': # for each journal, there is a raw source/link from which image can be pulled.
 			image_raw = entry.content[0].value
-		elif feed_name == 'Arxiv Optics' or "Biorxiv Biophys/Bioeng":
+			authors_raw = entry.authors
+		elif feed_name == 'Arxiv Optics':
 			image_raw = entry.link
+			authors_raw = entry.authors
+		elif feed_name == "Biorxiv Biophys/Bioeng": 
+			image_raw = entry.link
+			authors_raw = entry.link # scrape authors from html
+		elif feed_name == 'Science' or feed_name == 'Science Advances':
+			image_raw = ''
+			authors_raw = entry.link # scrape authors from html
 		else:
 			image_raw = ''
+			authors_raw = entry.authors
 		abstract = unidecode(entry.summary.replace('\n',' '))
 		row = [[unidecode(entry.title), entry.link, feed_name, abstract ]] 
 		if row[0][0].strip().lower() not in titles_list:
@@ -81,11 +90,11 @@ for feed in feed_info.keys():
 			helpers.write_to_db(proba_out)
 			written = written + 1
 			if proba_out[-1] >=0.6:
-				handles = helpers.get_author_handles(entry.authors,feed_name)
+				handles = helpers.get_author_handles(authors_raw,feed_name)
 				if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics %s' % (entry.title, proba_out[-1]* 100,entry.link,handles),helpers.scrape_image(image_raw,feed_name)):
 						posted = posted + 1
 			elif proba_out[-1] < 0.6 and (feed_name == 'Biomedical Optics Express' or feed_name == 'Journal of Biophotonics'):
-				handles = helpers.get_author_handles(entry.authors,feed_name)
+				handles = helpers.get_author_handles(authors_raw,feed_name)
 				if helpers.tweet_post('%s (relevance: %.0f%% but cat probably meowssed up) %s #biophotonics #biomedicaloptics %s' % (entry.title, proba_out[-1]* 100, entry.link,handles),helpers.scrape_image(image_raw,feed_name)):
 						posted = posted + 1
 				

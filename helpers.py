@@ -120,8 +120,14 @@ def get_author_handles(raw_author_list,journal):
 	
 	handles_all = ''
 	if journal == 'Biorxiv Biophys/Bioeng' or journal == 'Science' or journal == 'Science Advances':
-		raw_author_list_split=raw_author_list[0]['name'].split(', ')
-		author_list = []
+		#paper_id = urllib.parse.urlparse(raw_author_list).path.split('/')[-1]
+		#paper_path = 'https://www.biorxiv.org/content/10.1101/' + paper_id + '.full'
+		soup = BeautifulSoup(urllib.request.urlopen(raw_author_list).read(),'lxml')
+		authors_raw = soup.find_all('meta',{'class':'DC.Contributor'})	
+		author_list = [x['content'] for x in authors_raw]
+		
+		#raw_author_list_split=raw_author_list[0]['name'].split(', ')
+		#author_list = []
 #		for i in range(0,len(raw_author_list_split),2):
 #			author_list.append(raw_author_list_split[i+1].replace('.','')+' '+raw_author_list_split[i])	
 #		# names are given in initials and last name. need to change format of twitter names.
@@ -174,9 +180,9 @@ def scrape_image(raw, journal):
 
 	elif journal == "Biorxiv Biophys/Bioeng":
 		makedirs('./data/',exist_ok=True)
-		paper_id = urllib.parse.urlparse(raw).path.split('/')[-1]
-		paper_path = 'https://www.biorxiv.org/content/10.1101/' + paper_id + '.full'
-		soup = BeautifulSoup(urllib.request.urlopen(paper_path).read(),'lxml')
+		#paper_id = urllib.parse.urlparse(raw).path.split('/')[-1]
+		#paper_path = 'https://www.biorxiv.org/content/10.1101/' + paper_id + '.full'
+		soup = BeautifulSoup(urllib.request.urlopen(raw).read(),'lxml')
 		links_raw = soup.find_all('a',{'class':'highwire-figure-link highwire-figure-link-download'})
 		if len(links_raw) == 0:
 			print('Biorxiv: no full text images, so extracting PDF...')
