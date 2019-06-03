@@ -76,8 +76,11 @@ for feed in feed_info.keys():
 		elif feed_name == "Biorxiv Biophys/Bioeng": 
 			image_raw = entry.link
 			authors_raw = entry.link # scrape authors from html
-		elif feed_name == 'Science' or feed_name == 'Science Advances':
+		elif feed_name == 'Science':
 			image_raw = ''
+			authors_raw = entry.link # scrape authors from html
+		elif feed_name == 'Science Advances':
+			image_raw = entry.link
 			authors_raw = entry.link # scrape authors from html
 		else:
 			image_raw = ''

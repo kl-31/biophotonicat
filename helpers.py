@@ -178,6 +178,16 @@ def scrape_image(raw, journal):
 		urllib.request.urlretrieve(link,'./data/tweet_pic'+extension)
 		call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/tweet_pic'+extension,'./data/tweet_pic.png'])
 
+	elif journal == 'Science Advances':
+		makedirs('./data/',exist_ok=True)
+		soup = BeautifulSoup(urllib.request.urlopen(raw).read(),'lxml')
+		links_raw = soup.find_all('img',{'class':'fragment-image lazyload'})		
+		links = [x['data-src'][:-10]+'large.jpg' for x in links_raw]
+		pic_raw = choice(links)
+		urllib.request.urlretrieve(pic_raw,'./data/pic_raw'+'.jpg')
+		call(['convert','-density','300','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/pic_raw.jpg','./data/tweet_pic.png'])
+
+
 	elif journal == "Biorxiv Biophys/Bioeng":
 		makedirs('./data/',exist_ok=True)
 		#paper_id = urllib.parse.urlparse(raw).path.split('/')[-1]
