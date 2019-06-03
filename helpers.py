@@ -220,7 +220,7 @@ def scrape_image(raw, journal):
 					img_pgs.append(str(i)) # pages with images
 			if len(img_pgs) > 0:
 				pg_choice = choice(img_pgs)
-				call(['convert','-density','150','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./data/paper.pdf['+ pg_choice+']','./data/tweet_pic.png'])
+				call(['convert','-density','150','-define', 'trim:percent-background=2%','-trim','+repage','-background', 'white', '-alpha', 'remove', '-alpha', 'off','./source['+ pg_choice+']','./data/tweet_pic.png'])
 				print('Page %s saved as image.' % pg_choice)
 			else:
 				return False
