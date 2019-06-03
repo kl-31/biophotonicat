@@ -61,7 +61,7 @@ written = 0
 posted = 0
 titles_list = helpers.get_titles_db()
 for feed in feed_info.keys():	
-	#print(feed)
+	print(feed)
 	feed_name = feed_info[feed]['name']
 	feed_path = feed_info[feed]['path']
 	feed_rss = feedparser.parse(feed_path)
