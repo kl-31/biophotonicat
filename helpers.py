@@ -30,7 +30,7 @@ from random import choice, randint
 from PyPDF2 import PdfFileReader
 import fitz
 import html2text
-import fuzzywuzzy as fuzz
+from fuzzywuzzy import fuzz
 #import bitly_api
 #import sys
 
