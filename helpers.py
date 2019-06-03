@@ -105,6 +105,10 @@ def get_author_handles(raw_author_list,journal):
 		for page in tweepy.Cursor(api.followers_ids, screen_name=account).pages():
 			ids.extend(page)
 			sleep(5)
+	for page in tweepy.Cursor(api.friends_ids, screen_name='biophotonicat').pages():
+		ids.extend(page)
+		sleep(5)		
+			
 	ids = list(set(ids)) # dedupe
 	#print(len(ids))
 	for chunk_i in range(0,len(ids),100):
