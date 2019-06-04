@@ -50,7 +50,7 @@ if __name__ == '__main__':
 	# PUBMED QUERY
 	groups = [['physics','engineering','cell biology','medical imaging'],
 			   ['biomedical optics express', 'journal of biophotonics','journal of biomedical optics', 'optical imaging','biophotonics','biomedical optics',
-	   'optical coherence tomography','photoacoustic tomography','nonlinear microscopy','super-resolution microscopy','optical biopsy']]
+	   'optical coherence tomography','photoacoustic tomography','nonlinear microscopy','super-resolution microscopy','optical biopsy','nanoscopy']]
 	start = time.time()
 	with open('new-paper-titles-data-abstracts3.csv', mode='w') as data_file:
 		file_writer =  csv.writer(data_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
