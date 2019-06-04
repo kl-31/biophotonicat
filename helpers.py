@@ -145,7 +145,10 @@ def get_author_handles(raw_author_list,journal):
 		author_list = h.handle(raw_author_list[0]['name'])
 		author_list = (author_list).replace('\n',' ').split(', ')
 	elif journal == "Journal of Biophotonics":
-		author_list=raw_author_list[0]['name'].replace('\n','').split(', ')
+		if 'name' in raw_author_list[0]:
+			author_list=raw_author_list[0]['name'].replace('\n','').split(', ')
+		else:
+			author_list = []
 	elif journal == "PNAS Engineering":
 		author_list=raw_author_list[0]['name'].split(', ')
 	else: 
