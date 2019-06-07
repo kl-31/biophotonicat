@@ -96,7 +96,7 @@ def pull_handles_from_twitter(accounts):
 	# twitter followers
 	auth = tweepy.OAuthHandler(environ['TWITTER_CONSUMER_KEY'], environ['TWITTER_CONSUMER_SECRET'])
 	auth.set_access_token(environ['TWITTER_ACCESS_TOKEN'], environ['TWITTER_ACCESS_SECRET'])
-	api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True,retry_count=10, retry_delay=5, retry_errors=set([130])	
+	api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True,retry_count=10, retry_delay=5, retry_errors=set([503])	
 	ids = []
 	names = []
 	handles = []
@@ -298,7 +298,7 @@ def compute_proba(titles):
 def tweet_post(line,image_flag):
 	auth = tweepy.OAuthHandler(environ['TWITTER_CONSUMER_KEY'], environ['TWITTER_CONSUMER_SECRET'])
 	auth.set_access_token(environ['TWITTER_ACCESS_TOKEN'], environ['TWITTER_ACCESS_SECRET'])
-	api = tweepy.API(auth,retry_count=10, retry_delay=5, retry_errors=set([130])	
+	api = tweepy.API(auth,retry_count=10, retry_delay=5, retry_errors=set([503])	
 	try:
 		if image_flag == False:
 			api.update_status(line)
