@@ -92,7 +92,7 @@ def strip_html(s):
 			s = soup.get_text() 
 		return s
 
-def get_author_handles(raw_author_list,journal):
+def pull_handles_from_twitter(accounts):
 	# twitter followers
 	auth = tweepy.OAuthHandler(environ['TWITTER_CONSUMER_KEY'], environ['TWITTER_CONSUMER_SECRET'])
 	auth.set_access_token(environ['TWITTER_ACCESS_TOKEN'], environ['TWITTER_ACCESS_SECRET'])
@@ -100,7 +100,7 @@ def get_author_handles(raw_author_list,journal):
 	ids = []
 	names = []
 	handles = []
-	accounts = ['rita_strack','joachimgoedhart']
+	#accounts =  ['rita_strack','joachimgoedhart']
 	for account in accounts:
 		for page in tweepy.Cursor(api.followers_ids, screen_name=account).pages():
 			ids.extend(page)
@@ -117,6 +117,10 @@ def get_author_handles(raw_author_list,journal):
 		handles.extend(['@'+user.screen_name for user in users_obj])
 		sleep(5)
 	author_handles_data = dict(zip(names,handles))	
+	return author_handles_data
+	
+def get_author_handles(raw_author_list,journal,author_handles_data):
+
 	
 	handles_all = ''
 	if journal == 'Biorxiv Biophys/Bioeng' or journal == 'Science' or journal == 'Science Advances':
@@ -294,7 +298,7 @@ def compute_proba(titles):
 def tweet_post(line,image_flag):
 	auth = tweepy.OAuthHandler(environ['TWITTER_CONSUMER_KEY'], environ['TWITTER_CONSUMER_SECRET'])
 	auth.set_access_token(environ['TWITTER_ACCESS_TOKEN'], environ['TWITTER_ACCESS_SECRET'])
-	api = tweepy.API(auth)	
+	api = tweepy.API(auth,retry_count=10, retry_delay=5, retry_errors=set([130])	
 	try:
 		if image_flag == False:
 			api.update_status(line)
