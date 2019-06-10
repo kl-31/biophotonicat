@@ -72,10 +72,20 @@ for feed in feed_info.keys():
 		entry = feed_rss.entries[i]
 		if feed_name == 'Journal of Biophotonics': # for each journal, there is a raw source/link from which image can be pulled.
 			image_raw = entry.content[0].value
-			authors_raw = entry.authors
+			if 'authors' in entry:
+				authors_raw = entry.authors
+			elif 'author' in entry:
+				authors_raw = entry.author
+			else:
+				authors_raw = ''
 		elif feed_name == 'Arxiv Optics':
 			image_raw = entry.link
-			authors_raw = entry.authors
+			if 'authors' in entry:
+				authors_raw = entry.authors
+			elif 'author' in entry:
+				authors_raw = entry.author
+			else:
+				authors_raw = ''
 		elif feed_name == "Biorxiv Biophys/Bioeng": 
 			image_raw = entry.link
 			authors_raw = entry.link # scrape authors from html
@@ -87,7 +97,12 @@ for feed in feed_info.keys():
 			authors_raw = entry.link # scrape authors from html
 		else:
 			image_raw = ''
-			authors_raw = entry.authors
+			if 'authors' in entry:
+				authors_raw = entry.authors
+			elif 'author' in entry:
+				authors_raw = entry.author
+			else:
+				authors_raw = ''
 		abstract = unidecode(entry.summary.replace('\n',' '))
 		row = [[unidecode(entry.title), entry.link, feed_name, abstract ]] 
 		if row[0][0].strip().lower() not in titles_list:
