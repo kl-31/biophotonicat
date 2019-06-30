@@ -111,12 +111,12 @@ for feed in feed_info.keys():
 			helpers.write_to_db(proba_out)
 			written = written + 1
 			if proba_out[-1] >=0.6:
-				handles = helpers.get_author_handles(authors_raw,feed_name,twit_handles)
-				if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics %s' % (entry.title, proba_out[-1]* 100,entry.link,handles),helpers.scrape_image(image_raw,feed_name)):
+				#handles = helpers.get_author_handles(authors_raw,feed_name,twit_handles)
+				if helpers.tweet_post('%s (relevance: %.0f%%) %s #biophotonics #biomedicaloptics' % (entry.title, proba_out[-1]* 100,entry.link),helpers.scrape_image(image_raw,feed_name)):
 						posted = posted + 1
 			elif proba_out[-1] < 0.6 and (feed_name == 'Biomedical Optics Express' or feed_name == 'Journal of Biophotonics'):
-				handles = helpers.get_author_handles(authors_raw,feed_name,twit_handles)
-				if helpers.tweet_post('%s (relevance: %.0f%% but cat probably meowssed up) %s #biophotonics #biomedicaloptics %s' % (entry.title, proba_out[-1]* 100, entry.link,handles),helpers.scrape_image(image_raw,feed_name)):
+				#handles = helpers.get_author_handles(authors_raw,feed_name,twit_handles)
+				if helpers.tweet_post('%s %s #biophotonics #biomedicaloptics' % (entry.title, entry.link),helpers.scrape_image(image_raw,feed_name)):
 						posted = posted + 1
 				
 		if posted >=22: # 22 hours elapsed  
