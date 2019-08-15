@@ -36,7 +36,7 @@ from sklearn.externals import joblib
 import time
 import matplotlib.pyplot as plt
 import numpy as np
-
+import datetime
 
 def normalize_text(s):
 	s=''.join([i for i in s if not i.isdigit()]) # remove numbers
